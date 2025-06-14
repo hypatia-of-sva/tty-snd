@@ -5,6 +5,6 @@ Current modules:
 
 name | description
 --- | ---
-tty-wav: | loads a wave file
-tty-fft: | transforms a stream into its Fourier-transform
-tty-graph: | displays a stream in a raylib-graph-window
+tty-wav | loads a wave file
+tty-fft | transforms a stream into its Fourier-transform
+tty-graph | displays a stream in a raylib-graph-window
