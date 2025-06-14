@@ -1,5 +1,5 @@
 # tty-snd
-Modular system for creating, modifying and displaying audio streams in standard input/output
+tty-snd (terminal sound, or \[t​ɪti sawnd\]) is a modular system for creating, modifying and displaying audio streams in standard input/output on the terminal
 
 Current modules:
 
