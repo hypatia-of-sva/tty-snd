@@ -23,7 +23,7 @@ waveform_t read_amplitude_data(char* file_name, int chosen_channel) {
 	if(fgetc(fp) != 'R' || fgetc(fp) != 'I' || fgetc(fp) != 'F' || fgetc(fp) != 'F')
 		die("invalid file (invalid \"RIFF\" tag)");
 	remaining = fgetc(fp)+(fgetc(fp)<<8)+(fgetc(fp)<<16)+(fgetc(fp)<<24);
-	if(filesize(fp) < remaining+8)
+	if(filesize(file_name) < remaining+8)
 		die("invalid file (file shorter than described in the header)");
 	if(fgetc(fp) != 'W' || fgetc(fp) != 'A' || fgetc(fp) != 'V' || fgetc(fp) != 'E')
 		die("invalid file (invalid \"WAVE\" tag)");

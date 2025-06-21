@@ -150,10 +150,10 @@ float clamp(float val, float min, float max) {
     if(val > max) return max;
     return val;
 }
-size_t filesize(FILE* fp) {
+
+size_t filesize(const char* path) {
     struct stat buf;
-    int fd = fileno(fp);
-    fstat(fd, &buf);
+    stat(path, &buf);
     off_t size = buf.st_size;
     return size;
 }
@@ -171,3 +171,6 @@ uint32_t truncate_power_of_2(uint32_t x) {
     }
     return 0;
 }
+
+
+

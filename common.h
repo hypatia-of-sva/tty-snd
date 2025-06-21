@@ -1,4 +1,7 @@
 
+#ifndef COMMON_H
+#define COMMON_H
+
 #include "raylib.h"
 #include "alad.h"
 
@@ -98,7 +101,7 @@ float* ifft_power_of_two(float* data, size_t len);
 void write_dbl_array(double* data, size_t len, const char* filename);
 void write_float_array(float* data, size_t len, const char* filename);
 void quick_sort_float(float* array, size_t len);
-size_t filesize(FILE* fp);
+size_t filesize(const char* path);
 void die(const char* str);
 bool is_power_of_2(uint32_t x);
 uint32_t truncate_power_of_2(uint32_t x);
@@ -166,3 +169,14 @@ typedef struct simple_wav_t {
 } simple_wav_t;
 simple_wav_t read_simple_wav(FILE* fp);
 void write_simple_wav(FILE* fp, simple_wav_t data);
+
+
+
+
+
+/* f80.c */
+
+void convert_to_extended_float_be(double val, char* outptr);
+double convert_from_extended_float_be(char* inptr);
+
+#endif

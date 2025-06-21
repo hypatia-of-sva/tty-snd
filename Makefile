@@ -7,18 +7,18 @@ IFLAGS = -I. -I../tool_2/raylib/src/
 
 
 
-FFT-SOURCES = fft_main.c fft.c util.c simple_wav.c
+FFT-SOURCES = fft_main.c fft.c util.c simple_wav.c f80.c
 FFT-OBJECTS = $(FFT-SOURCES:.c=.o)
 FFT-TARGET = tty-snd-fft
 
 
-WAV-SOURCES = wav_main.c wav.c util.c simple_wav.c
+WAV-SOURCES = wav_main.c wav.c util.c simple_wav.c f80.c
 WAV-OBJECTS = $(WAV-SOURCES:.c=.o)
 WAV-TARGET = tty-snd-wav
 
 
 
-GRAPH-SOURCES = graph_main.c util.c simple_wav.c
+GRAPH-SOURCES = graph_main.c util.c simple_wav.c f80.c
 GRAPH-OBJECTS = $(GRAPH-SOURCES:.c=.o)
 GRAPH-TARGET = tty-snd-graph
 
