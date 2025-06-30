@@ -5,6 +5,7 @@ Current modules:
 
 name | description
 --- | ---
-tty-wav | loads a wave file
-tty-fft | transforms a stream into its Fourier-transform
-tty-graph | displays a stream in a raylib-graph-window
+tty-snd-wav | loads a wave file
+tty-snd-fft | transforms a stream into its Fourier-transform
+tty-snd-graph | displays a stream in a raylib-graph-window
+tty-snd-peaks | finds the peaks in a stream and displays as if they were frequency spikes (formants)
