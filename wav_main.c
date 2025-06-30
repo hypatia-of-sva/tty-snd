@@ -10,8 +10,18 @@ int main(int argc, char** argv) {
 
     float* amplitudes = transform_to_complex_array(form.amplitude_data, len);
 
-    simple_wav_t float_form = {freq, 2*len, amplitudes};
+    simple_wav_t float_form;
+    float_form.frequency_in_hz = freq;
+    float_form.nr_sample_points = 2*len;
+    float_form.samples = amplitudes;
+
+
+
+    fprintf(stderr, "wav: f = %f\n", freq);
 
     write_simple_wav(stdout, float_form);
+
+
+
     return 0;
 }

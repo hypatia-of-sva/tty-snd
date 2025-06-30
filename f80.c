@@ -24,7 +24,7 @@ void convert_to_extended_float_be(double val, char* outptr) {
             /* these are not subnormals in 80 bit! */
             int highest_set_bit_in_mantissa = -1;
             for(int i = 0; i < 52; i++) {
-                if(old_mantissa & (1<<i)) highest_set_bit_in_mantissa = i;
+                if(old_mantissa & (1LL<<i)) highest_set_bit_in_mantissa = i;
             }
             assert(highest_set_bit_in_mantissa > 0);
             new_integer_bit = 1;

@@ -165,42 +165,6 @@ void merge_interval_lists(interval_t* old_intervals, size_t nr_old_intervals, in
 
 
 
-void merge_interval_lists_close_step(interval_t* old_intervals, size_t nr_old_intervals, interval_t* new_intervals, size_t nr_new_intervals, interval_t** intervals_out, size_t* nr_intervals_out) {
-    size_t how_many_new_intervals = 0, nr_copied_over = 0;
-    for(int i = 0; i < nr_new_intervals; i++) {
-        bool is_new = true;
-        for(int j = 0; j < nr_old_intervals; j++) {
-            if(interval_contains(new_intervals[i], old_intervals[j])) {
-                is_new = false;
-                break;
-            }
-        }
-        if(is_new) how_many_new_intervals++;
-    }
-
-
-
-    nr_intervals_out[0] = nr_old_intervals+how_many_new_intervals;
-    intervals_out[0] = calloc(sizeof(interval_t),nr_intervals_out[0]);
-    memcpy(intervals_out[0], old_intervals, sizeof(interval_t)*nr_old_intervals);
-
-    for(int i = 0; i < nr_new_intervals; i++) {
-        bool is_new = true;
-        for(int j = 0; j < nr_old_intervals; j++) {
-            if(interval_contains(new_intervals[i], old_intervals[j])) {
-                is_new = false;
-                break;
-            }
-        }
-        if(is_new) {
-            intervals_out[0][nr_old_intervals+nr_copied_over] = new_intervals[i];
-            nr_copied_over++;
-        }
-    }
-
-    assert(nr_copied_over == how_many_new_intervals);
-}
-
 
 
 void sort_interval_lists(interval_t* intervals, size_t nr_intervals) {
