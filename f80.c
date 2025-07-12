@@ -113,13 +113,8 @@ double convert_from_extended_float_be(char* inptr) {
     }
 
     new_double = ((uint64_t)(sign_bit | ((new_exponent&0x07F0)>>4)))<<56;
-    new_double |= ((new_exponent&0x00F) | (new_mantissa&0x000F000000000000LL))<<48;
-    new_double |= (new_mantissa&0x0000FF0000000000LL)<<40;
-    new_double |= (new_mantissa&0x000000FF00000000LL)<<32;
-    new_double |= (new_mantissa&0x00000000FF000000LL)<<24;
-    new_double |= (new_mantissa&0x0000000000FF0000LL)<<16;
-    new_double |= (new_mantissa&0x000000000000FF00LL)<<8;
-    new_double |= (new_mantissa&0x00000000000000FFLL);
+    new_double |= (((uint64_t)new_exponent&0x00F))<<52;
+    new_double |= new_mantissa;
 
     return ((double*)(&new_double))[0];
 }

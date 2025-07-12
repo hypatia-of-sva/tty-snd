@@ -117,6 +117,19 @@ int16_t *transform_complex_to_int_array(const float* old_array, size_t length);
 Vector2* create_graph_from_float_array (float* array, size_t length, float base_x, float base_y, float max_x, float max_y);
 int float_cmp_qsort(const void* pa, const void* pb);
 
+double hz_to_octave(double freq_in_hz);
+char* note_name(double freq_in_hz, int* out_oct, int* out_note, int* out_cents);
+
+int peak_by_freq_cmp_qsort(const void* pa, const void* pb);
+int peak_by_height_cmp_qsort(const void* pa, const void* pb);
+
+typedef struct peak_t {
+    float freq;
+    float height;
+    int formant_nr;
+    int merged_peaks;
+} peak_t;
+
 
 /* direct_peak.c */
 int* calculate_peaks(float* data, size_t len, const char* filename);

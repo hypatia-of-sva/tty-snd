@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
 
 
 
-    fprintf(stderr, "wav: f = %f\n", freq);
+    //fprintf(stderr, "wav: f = %f\n", freq);
 
     write_simple_wav(stdout, float_form);
 

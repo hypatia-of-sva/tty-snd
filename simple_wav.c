@@ -2,8 +2,8 @@
 
 
 /* asserted fgetc */
-char afgetc(FILE* fd) {
-    char c = fgetc(fd);
+unsigned char afgetc(FILE* fd) {
+    int c = fgetc(fd);
     assert(c != EOF);
     return c;
 }
@@ -15,7 +15,11 @@ uint16_t read_u16be(FILE* fd)  {
     return ((uint16_t)afgetc(fd)<<8) + ((uint16_t)afgetc(fd));
 }
 uint32_t read_u32be(FILE* fd)  {
-    return ((uint32_t)afgetc(fd)<<24) + ((uint32_t)afgetc(fd)<<16) + ((uint32_t)afgetc(fd)<<8) + ((uint32_t)afgetc(fd));
+    uint32_t c1 = ((uint32_t)afgetc(fd))<<24;
+    uint32_t c2 = ((uint32_t)afgetc(fd))<<16;
+    uint32_t c3 = ((uint32_t)afgetc(fd))<<8;
+    uint32_t c4 = ((uint32_t)afgetc(fd));
+    return (c1+c2+c3+c4);
 }
 void write_u16be(FILE* fd, uint16_t val) {
     afputc((val&0xFF00)>>8, fd);
@@ -134,13 +138,16 @@ void write_simple_wav(FILE* fp, simple_wav_t data) {
     fprintf(fp, "\7tty-snd"); /* application id */
     fwrite(appdata, 1, sizeof(appdata), fp);
     fprintf(fp, "SSND");
-    write_i32be(fp, sizeof(float)*data.nr_sample_points+8);
+    size_t ssnd_block_size = sizeof(float)*data.nr_sample_points+8;
+    write_i32be(fp, ssnd_block_size);
     write_i32be(fp, 0);
     write_i32be(fp, 0);
     /*fwrite(data.samples, sizeof(float), data.nr_sample_points, fp); */
     for(int i = 0; i < data.nr_sample_points; i++) {
         write_f32be(fp, data.samples[i]);
     }
+
+    fprintf(stderr, "out nr = %lu, blk = %lu\n", data.nr_sample_points, ssnd_block_size);
 }
 
 simple_wav_t read_simple_wav(FILE* fp) {
@@ -153,14 +160,18 @@ simple_wav_t read_simple_wav(FILE* fp) {
     check_input(fp, "AIFC");                        size_to_read -= 4;
     check_input(fp, "FVER");                        size_to_read -= 4;
     assert(read_i32be(fp) == 4);                    size_to_read -= 4;
-    assert(afgetc(fp) == (char) 0xA2);              size_to_read -= 1;
-    assert(afgetc(fp) == (char) 0x80);              size_to_read -= 1;
-    assert(afgetc(fp) == (char) 0x51);              size_to_read -= 1;
-    assert(afgetc(fp) == (char) 0x40);              size_to_read -= 1;
+    assert(afgetc(fp) == (unsigned char) 0xA2);              size_to_read -= 1;
+    assert(afgetc(fp) == (unsigned char) 0x80);              size_to_read -= 1;
+    assert(afgetc(fp) == (unsigned char) 0x51);              size_to_read -= 1;
+    assert(afgetc(fp) == (unsigned char) 0x40);              size_to_read -= 1;
     check_input(fp, "COMM");                        size_to_read -= 4;
     assert(read_i32be(fp) == 24);                   size_to_read -= 4;
     assert(read_i16be(fp) == 1);                    size_to_read -= 2;
     ret.nr_sample_points = read_i32be(fp);          size_to_read -= 4;
+
+    size_t expected_size = sizeof(float)*ret.nr_sample_points+8;
+    fprintf(stderr, "in nr = %lu, blk = %lu\n", ret.nr_sample_points, expected_size);
+
     assert(read_i16be(fp) == 32);                   size_to_read -= 2;
     char extended[10];
     fread(&extended[0], 10, 1, fp);                 size_to_read -= 10;
@@ -176,7 +187,7 @@ simple_wav_t read_simple_wav(FILE* fp) {
     fread(appdata_buf, 1, sizeof(appdata), fp);         size_to_read -= sizeof(appdata);
     assert(strcmp(appdata, appdata_buf) == 0);
     check_input(fp, "SSND");                                            size_to_read -= 4;
-    assert(read_i32be(fp) == sizeof(float)*ret.nr_sample_points+8);    size_to_read -= 4;
+    assert(read_i32be(fp) == expected_size);    size_to_read -= 4;
     assert(read_i32be(fp) == 0);                   size_to_read -= 4;
     assert(read_i32be(fp) == 0);                   size_to_read -= 4;
     ret.samples = calloc(ret.nr_sample_points, sizeof(float));

@@ -41,6 +41,23 @@ int float_cmp_qsort(const void* pa, const void* pb) {
     else return -1;
 }
 
+
+int peak_by_freq_cmp_qsort(const void* pa, const void* pb) {
+    peak_t a = ((peak_t*)pa)[0];
+    peak_t b = ((peak_t*)pb)[0];
+    if(a.freq == b.freq) return 0;
+    if(a.freq > b.freq) return 1;
+    else return -1;
+}
+int peak_by_height_cmp_qsort(const void* pa, const void* pb) {
+    peak_t a = ((peak_t*)pa)[0];
+    peak_t b = ((peak_t*)pb)[0];
+    if(a.height == b.height) return 0;
+    if(a.height > b.height) return 1;
+    else return -1;
+}
+
+
 void quick_sort_float(float* array, size_t len) {
     /* iterative quicksort, adapted from https://www.geeksforgeeks.org/iterative-quick-sort/ */
     int* stack = calloc(len,sizeof(int));
@@ -172,5 +189,69 @@ uint32_t truncate_power_of_2(uint32_t x) {
     return 0;
 }
 
+#define C0_Hz 16.351597831287414
+
+double hz_to_octave(double freq_in_hz) {
+    return log2(freq_in_hz/C0_Hz);
+}
+
+char* note_name(double octave, int* out_oct, int* out_note, int* out_cents) {
+    if(octave < 0 || octave > 10) return NULL;
+    int octave_nr = floor(octave);
+    int closest_note = lround((octave - octave_nr)*12);
+    if(closest_note == 12) {
+        closest_note = 0;
+        octave_nr++;
+    }
+    int cents = lround((((octave - octave_nr)*12)-closest_note)*100);
+    //printf("O\t\t%f, %f, %i, %i, %i\n", freq_in_hz, octave, octave_nr, closest_note, cents);
+    char* note_names[12] = {
+        "C ", "C#", "D ", "D#", "E ", "F ", "F#", "G ", "G#", "A ", "A#", "B "
+    };
+
+    //printf("\t\t%f, %f, %i, %i, %i\n", freq_in_hz, octave, octave_nr, closest_note, cents);
+
+    if(out_oct != NULL)
+        out_oct[0] = octave_nr;
+    if(out_note != NULL)
+        out_note[0] = closest_note;
+    if(out_cents != NULL)
+        out_cents[0] = cents;
+
+
+    assert(octave_nr >= 0 && octave_nr <= 10);
+    assert(closest_note >= 0 && closest_note <= 11);
+    assert(cents >= -50 && octave_nr <= 50);
+
+
+    char* buf = calloc(9,1);
+    buf[0] = note_names[closest_note][0];
+    buf[1] = note_names[closest_note][1];
+    if(octave_nr == 10) {
+        buf[2] = '1';
+        buf[3] = '0';
+    } else {
+        buf[2] = '0'+octave_nr;
+        buf[3] = ' ';
+    }
+    if(cents == 0) {
+        buf[4] = '+';
+        buf[5] = '-';
+        buf[6] = '0';
+        buf[7] = 'c';
+    } else if(cents > 0) {
+        buf[4] = '+';
+        buf[5] = '0'+(abs(cents)/10);
+        buf[6] = '0'+(abs(cents)%10);
+        buf[7] = 'c';
+    } else {
+        buf[4] = '-';
+        buf[5] = '0'+(abs(cents)/10);
+        buf[6] = '0'+(abs(cents)%10);
+        buf[7] = 'c';
+    }
+    buf[8] = '\0';
+    return buf;
+}
 
 
