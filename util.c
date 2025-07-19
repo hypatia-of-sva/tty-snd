@@ -255,3 +255,53 @@ char* note_name(double octave, int* out_oct, int* out_note, int* out_cents) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+char** split(const char* str, size_t len, char sep, int* out_num_strings) {
+  assert(out_num_strings != NULL);
+  out_num_strings[0] = 1;
+  bool in_sep = (str[0] == sep);
+  for(int i = 0; i < len; i++) {
+    if(str[i] == sep && !in_sep && i != len-1) {
+      out_num_strings[0]++;
+      in_sep = true;
+    } else {
+      in_sep = false;
+    }
+  }
+
+  char** split_strings = calloc(out_num_strings[0], sizeof(char*));
+  int str_idx = 0;
+  in_sep = (str[0] == sep);
+  int first_char = 0;
+  for(int i = 0; i < len; i++) {
+    if(str[i] == sep && !in_sep) {
+      size_t new_len = i - first_char + 1;
+      split_strings[str_idx] = malloc(new_len);
+      memmove(split_strings[str_idx], &str[first_char], new_len-1);
+      split_strings[str_idx][new_len-1] = '\0';
+      str_idx++;
+      in_sep = true;
+    } else if (str[i] != sep) {
+      if(in_sep) first_char = i;
+      in_sep = false;
+    }
+  }
+  if(!in_sep) {
+    size_t new_len = (len) - first_char+1;
+    split_strings[str_idx] = malloc(new_len);
+    memmove(split_strings[str_idx], &str[first_char], new_len-1);
+    split_strings[str_idx][new_len-1] = '\0';
+  }
+  assert(str_idx+1 == out_num_strings[0]);
+
+  return split_strings;
+}

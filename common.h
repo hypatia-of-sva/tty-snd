@@ -131,6 +131,9 @@ typedef struct peak_t {
 } peak_t;
 
 
+char** split(const char* str, size_t len, char sep, int* out_num_strings);
+
+
 /* direct_peak.c */
 int* calculate_peaks(float* data, size_t len, const char* filename);
 int* calculate_peaks_dbl(double* data, size_t len, const char* filename);

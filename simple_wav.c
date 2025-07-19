@@ -2,13 +2,13 @@
 
 
 /* asserted fgetc */
-unsigned char afgetc(FILE* fd) {
+uint8_t afgetc(FILE* fd) {
     int c = fgetc(fd);
     assert(c != EOF);
     return c;
 }
 /* asserted fputc */
-void afputc(char c, FILE* fd) {
+void afputc(uint8_t c, FILE* fd) {
     assert(fputc(c, fd) != EOF);
 }
 uint16_t read_u16be(FILE* fd)  {
