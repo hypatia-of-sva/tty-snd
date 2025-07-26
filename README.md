@@ -23,7 +23,7 @@ After ensuring all dependencies are meet, navigate to the TTY-SND folder from gi
 Make now executes a bunch of gcc commands. One for each module of the project. 
 
 Now you should be able to run the modules. To verify that the project compilled correctly, we recommend you run `$ ./tty-snd-mic-src`
-you should now see a list of microphones connected to the system. On my system for example the command returns:
+you should now see a list of microphones connected to the system. On @llmatos system for example the command returns:
 
     Available mics:
     0: QUAD-CAPTURE 1-2 (1L+2R)
