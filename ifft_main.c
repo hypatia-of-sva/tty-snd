@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
     }
 
 
-    float* fft_array = fft_power_of_two(float_form.samples, float_form.nr_sample_points);
+    float* fft_array = ifft_power_of_two(float_form.samples, float_form.nr_sample_points);
 
     simple_wav_t out_form;
     out_form.frequency_in_hz = float_form.frequency_in_hz;
