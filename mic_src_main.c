@@ -121,10 +121,10 @@ int main(int argc, char** argv) {
         else if(argc > 3 && strcmp(argv[3], "wav") == 0) {
             simple_wav_t raw_form;
             raw_form.frequency_in_hz = 44100.0f;
-            raw_form.nr_sample_points = truncate_power_of_2(buffersize);
+            raw_form.nr_sample_points = truncate_power_of_2(buffersize/2);
             float* raw_copy = calloc(sizeof(float), raw_form.nr_sample_points);
             for(int i = 0; i < raw_form.nr_sample_points; i++) {
-                raw_copy[i] = (float) buf[i];
+                raw_copy[i] = (float) buf[2*i];
             }
             float * norm_copy = normalize_float_array(raw_copy, raw_form.nr_sample_points);
             raw_form.samples = norm_copy;
