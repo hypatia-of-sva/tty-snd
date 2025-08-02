@@ -111,19 +111,42 @@ int main(int argc, char** argv) {
         alcCaptureStop(capture);
 
 
-        size_t len = truncate_power_of_2(buffersize);
-        float freq = ((float)44100);
-        if(!is_power_of_2(len)) die("Data size collected not power of two!");
 
-        float* amplitudes = transform_to_complex_array(buf, len);
+        //Raw output for debug, courtesy of @Llamato on github
+        if(argc > 3 && strcmp(argv[3], "raw") == 0) {
+            //Write raw pcm directly to stdout
+            fwrite(buf, sizeof(int16_t), buffersize, stdout);
+            fprintf(stderr, "%s\n", "writing raw to stdout");
+        }
+        else if(argc > 3 && strcmp(argv[3], "wav") == 0) {
+            simple_wav_t raw_form;
+            raw_form.frequency_in_hz = 44100.0f;
+            raw_form.nr_sample_points = truncate_power_of_2(buffersize);
+            float* raw_copy = calloc(sizeof(float), raw_form.nr_sample_points);
+            for(int i = 0; i < raw_form.nr_sample_points; i++) {
+                raw_copy[i] = (float) buf[i];
+            }
+            float * norm_copy = normalize_float_array(raw_copy, raw_form.nr_sample_points);
+            raw_form.samples = norm_copy;
+            write_simple_wav(stdout, raw_form);
+            free(raw_copy);
+        }
+        else {
+            size_t len = truncate_power_of_2(buffersize);
+            float freq = ((float)44100);
+            if(!is_power_of_2(len)) die("Data size collected not power of two!");
+
+            float* amplitudes = transform_to_complex_array(buf, len);
+
+            simple_wav_t float_form;
+            float_form.frequency_in_hz = freq;
+            float_form.nr_sample_points = 2*len;
+            float_form.samples = amplitudes;
+
+            write_simple_wav(stdout, float_form);
+        }
 
 
-        simple_wav_t float_form;
-        float_form.frequency_in_hz = freq;
-        float_form.nr_sample_points = 2*len;
-        float_form.samples = amplitudes;
-
-        write_simple_wav(stdout, float_form);
 
         alcCaptureCloseDevice(capture);
     }
