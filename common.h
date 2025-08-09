@@ -128,10 +128,12 @@ typedef struct peak_t {
     float height;
     int formant_nr;
     int merged_peaks;
+    float rolloff_v;
 } peak_t;
 
 
 char** split(const char* str, size_t len, char sep, int* out_num_strings);
+float *transform_float_to_complex_array(const float* old_array, size_t length);
 
 
 /* direct_peak.c */

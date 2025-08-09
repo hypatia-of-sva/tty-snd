@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
 
         float time = atof(argv[2]);
 
-        size_t buffersize = 44100*time;
+        size_t buffersize = 44100*time*2;
 
         fprintf(stderr, "chosen dev: %s\n", devs[dev_nr]);
 
@@ -132,11 +132,16 @@ int main(int argc, char** argv) {
             free(raw_copy);
         }
         else {
-            size_t len = truncate_power_of_2(buffersize);
+            size_t len = truncate_power_of_2(buffersize/2);
             float freq = ((float)44100);
             if(!is_power_of_2(len)) die("Data size collected not power of two!");
 
-            float* amplitudes = transform_to_complex_array(buf, len);
+            float* raw_copy = calloc(sizeof(float), len);
+            for(int i = 0; i < len; i++) {
+                raw_copy[i] = (float) buf[2*i];
+            }
+            float * norm_copy = normalize_float_array(raw_copy, len);
+            float* amplitudes = transform_float_to_complex_array(norm_copy, len);
 
             simple_wav_t float_form;
             float_form.frequency_in_hz = freq;

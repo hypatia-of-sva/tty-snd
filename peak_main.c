@@ -19,6 +19,7 @@ int main(int argc, char** argv) {
 
 
     peak_t* peaks = calloc(nr_intervals, sizeof(peak_t));
+   /* float* rolloff_v = calloc(nr_intervals, sizeof(float)); */
     size_t nr_peaks = nr_intervals;
 
     /*
@@ -49,6 +50,36 @@ typedef struct peak_t {
         //if(name == NULL) continue;
         //printf("F%i: %s (%fHz-%fHz); y = %f\n", i, name, lower_frequency_in_herz, upper_frequency_in_herz, peaks[i].height);
         //free(name);
+        int bounds_for_calculating_rolloff_v;
+        if(i != nr_intervals-1) {
+            bounds_for_calculating_rolloff_v = intervals[i+1].lower_index;
+        } else {
+            bounds_for_calculating_rolloff_v = len - 1;
+        }
+        int mid_index = intervals[i].upper_index+1;
+        float min_value;
+        for(int j = intervals[i].upper_index+1; j <= bounds_for_calculating_rolloff_v; j++) {
+            if(normalized_frequencies[j] < min_value) {
+                min_value = normalized_frequencies[j];
+                mid_index = j;
+            }
+        }
+        float criterion_height = min_value + 0.8f*(peaks[i].height - min_value);
+        int find_index = mid_index;
+        float find_value = normalized_frequencies[find_index];
+        for(int j = mid_index+1; j > intervals[i].upper_index; j--) {
+            float curr = normalized_frequencies[j];
+            if(curr > find_value) {
+                find_index = j;
+                find_value = curr;
+            }
+            if(find_value > criterion_height) {
+                break;
+            }
+        }
+        int delta_x = intervals[i].upper_index - find_index;
+        float delta_y = peaks[i].height - find_value;
+        peaks[i].rolloff_v = delta_y/delta_x;
     }
         //quick_sort_float(interval_formant_frequencies, nr_intervals);
     qsort(peaks, nr_peaks, sizeof(peak_t), peak_by_freq_cmp_qsort);
@@ -95,7 +126,7 @@ typedef struct peak_t {
         if(peaks[i].freq == -1.0f) continue;
         char* name = note_name(hz_to_octave(peaks[i].freq), &oct, &note, &cents);
         if(name == NULL) continue;
-        printf("F%3i: %s; y = %7f (mp:%i)\n", peaks[i].formant_nr, name, peaks[i].height, peaks[i].merged_peaks);
+        printf("F%3i: %s; y = %7f (mp:%i); rolloff_v=%f\n", peaks[i].formant_nr, name, peaks[i].height, peaks[i].merged_peaks, peaks[i].rolloff_v);
         free(name);
 
     }
@@ -103,7 +134,9 @@ typedef struct peak_t {
 
     float* formant_distances = calloc(nr_intervals-1, sizeof(float));
     float sum = 0.0f;
+    float avrg_rolloff_v = 0.0f;;
     for(int i = 1; i < nr_intervals; i++) {
+        avrg_rolloff_v += peaks[i].rolloff_v / ((float)nr_intervals);
         if(peaks[i].freq == -1.0f) continue;
         float distance = peaks[i].freq-peaks[i-1].freq;
         //printf("distance: %f\n", distance);
@@ -112,6 +145,7 @@ typedef struct peak_t {
     }
     printf("\nAverage distance: %f\n", sum/nr_intervals);
     printf("VTL in m = %f\n", 343.0/(2*(sum/nr_intervals)));
+    printf("Average rolloff v = %f\n", avrg_rolloff_v);
 
 
     //quick_sort_float(formant_distances, nr_intervals-1);

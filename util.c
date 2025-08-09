@@ -155,6 +155,17 @@ float *transform_to_complex_array(const int16_t* old_array, size_t length) {
     }
     return new_array;
 }
+
+float *transform_float_to_complex_array(const float* old_array, size_t length) {
+    float* new_array = malloc(length * 2 * sizeof(float));
+    for(int i = 0; i < length; i++) {
+        new_array[2*i] = old_array[i];
+        new_array[2*i+1] = 0.0f;
+    }
+    return new_array;
+}
+
+
 float* compute_complex_absolute_values(const float* old_array, size_t length) {
     float* new_array = malloc(length * sizeof(float));
     for(int i = 0; i < length; i++) {
