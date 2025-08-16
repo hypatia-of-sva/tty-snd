@@ -147,6 +147,8 @@
  * 
  */
 
+#include <stdio.h>
+
 
 #pragma once
 
@@ -1259,7 +1261,10 @@ void alad_load_lib_(void) {
     if (alad_module_ == nullptr) {
         alad_module_ = alad_open_ (alad_SECONDARY_LIB_NAME_);
     }
-    if (alad_module_ == nullptr) return;
+    if (alad_module_ == nullptr) {
+        fprintf(stderr, "DLL not found!\n");
+        return;
+    }
 }
 
 /* simplified Interface */
