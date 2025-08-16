@@ -147,7 +147,7 @@ void write_simple_wav(FILE* fp, simple_wav_t data) {
         write_f32be(fp, data.samples[i]);
     }
 
-    fprintf(stderr, "out nr = %llu, blk = %llu\n", data.nr_sample_points, ssnd_block_size);
+    fprintf(stderr, "out nr = %zu, blk = %zu\n", data.nr_sample_points, ssnd_block_size);
 }
 
 simple_wav_t read_simple_wav(FILE* fp) {
@@ -170,7 +170,7 @@ simple_wav_t read_simple_wav(FILE* fp) {
     ret.nr_sample_points = read_i32be(fp);          size_to_read -= 4;
 
     size_t expected_size = sizeof(float)*ret.nr_sample_points+8;
-    fprintf(stderr, "in nr = %llu, blk = %llu\n", ret.nr_sample_points, expected_size);
+    fprintf(stderr, "in nr = %zu, blk = %zu\n", ret.nr_sample_points, expected_size);
 
     assert(read_i16be(fp) == 32);                   size_to_read -= 2;
     char extended[10];

@@ -45,7 +45,7 @@ void find_intervals_above_cutoff(float* data, size_t len, float cutoff, interval
 
 void print_intervals(interval_t* intervals, size_t nr_intervals) {
     for(int i = 0; i < nr_intervals; i++) {
-        printf("[%lli,%lli]\n", intervals[i].lower_index, intervals[i].upper_index);
+        printf("[%zi,%zi]\n", intervals[i].lower_index, intervals[i].upper_index);
     }
 }
 
@@ -71,7 +71,7 @@ interval_t encompassing(interval_t a, interval_t b) {
 void print_interval_distances(interval_t* intervals, size_t nr_intervals) {
     for(int i = 0; i < nr_intervals-1; i++) {
         interval_t merge = encompassing(intervals[i], intervals[i+1]);
-        printf("[%lli,%lli] to [%lli,%lli] : %lli; merge = [%lli,%lli]\n", intervals[i].lower_index, intervals[i].upper_index, intervals[i+1].lower_index, intervals[i+1].upper_index, distance(intervals[i], intervals[i+1]), merge.lower_index, merge.upper_index);
+        printf("[%zi,%zi] to [%zi,%zi] : %zi; merge = [%zi,%zi]\n", intervals[i].lower_index, intervals[i].upper_index, intervals[i+1].lower_index, intervals[i+1].upper_index, distance(intervals[i], intervals[i+1]), merge.lower_index, merge.upper_index);
     }
 }
 
