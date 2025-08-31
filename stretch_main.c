@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
     out_form.nr_sample_points = 2*float_form.nr_sample_points;
     out_form.samples = calloc(sizeof(float), out_form.nr_sample_points);
     int maximum_written_index = (int) (((float)out_form.nr_sample_points)*(stretch/4.0f));
-    fprintf(stderr, "size: %li, max index: %i\n", out_form.nr_sample_points, maximum_written_index);
+    fprintf(stderr, "size: %lli, max index: %i\n", out_form.nr_sample_points, maximum_written_index);
     for(int i = 0; i < maximum_written_index; i++) {
         int original_index = floor((float)i*(1.0f/stretch));
         fprintf(stderr, "[%i]=%i,", i, original_index);

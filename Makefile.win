@@ -1,0 +1,101 @@
+CC = gcc
+CFLAGS = -Wall -Werror -g
+#-std=c90
+RAYLIB_FOLDER = raylib
+LDFLAGS = -L"." -L "raylib/lib" -lraylib -lopengl32 -lgdi32 -lwinmm -lm
+
+#-lgsl -lgslcblas
+IFLAGS = -I"raylib/include" -isystem"."
+
+
+COMMON-SOURCES = util.c simple_wav.c f80.c alad.c
+
+FFT-SOURCES = fft_main.c fft.c $(COMMON-SOURCES)
+FFT-OBJECTS = $(FFT-SOURCES:.c=.o)
+FFT-TARGET = tty-snd-fft.exe
+
+IFFT-SOURCES = ifft_main.c fft.c $(COMMON-SOURCES)
+IFFT-OBJECTS = $(IFFT-SOURCES:.c=.o)
+IFFT-TARGET = tty-snd-ifft.exe
+
+
+WAV-SOURCES = wav_main.c wav.c $(COMMON-SOURCES)
+WAV-OBJECTS = $(WAV-SOURCES:.c=.o)
+WAV-TARGET = tty-snd-wav.exe
+
+
+
+GRAPH-SOURCES = graph_main.c $(COMMON-SOURCES)
+GRAPH-OBJECTS = $(GRAPH-SOURCES:.c=.o)
+GRAPH-TARGET = tty-snd-graph.exe
+
+PEAK-SOURCES = cutoff_intervals.c peak_main.c $(COMMON-SOURCES)
+PEAK-OBJECTS = $(PEAK-SOURCES:.c=.o)
+PEAK-TARGET = tty-snd-peaks.exe
+
+
+MIC-SRC-SOURCES = mic_src_main.c $(COMMON-SOURCES)
+MIC-SRC-OBJECTS = $(MIC-SRC-SOURCES:.c=.o)
+MIC-SRC-TARGET = tty-snd-mic-src.exe
+
+
+STRETCH-SRC-SOURCES = stretch_main.c $(COMMON-SOURCES)
+STRETCH-SRC-OBJECTS = $(STRETCH-SRC-SOURCES:.c=.o)
+STRETCH-SRC-TARGET = tty-snd-stretch.exe
+
+
+PLAY-SOURCES = play_main.c $(COMMON-SOURCES)
+PLAY-OBJECTS = $(PLAY-SOURCES:.c=.o)
+PLAY-TARGET = tty-snd-play.exe
+
+
+REDUCE-SOURCES = reduce_main.c $(COMMON-SOURCES)
+REDUCE-OBJECTS = $(REDUCE-SOURCES:.c=.o)
+REDUCE-TARGET = tty-snd-reduce.exe
+
+
+.PHONY: all
+all: $(WAV-TARGET) $(FFT-TARGET) $(GRAPH-TARGET) $(PEAK-TARGET) $(MIC-SRC-TARGET) $(STRETCH-SRC-TARGET) $(IFFT-TARGET) $(PLAY-TARGET) $(REDUCE-TARGET)
+
+%.o : %.c
+	$(CC) $(CFLAGS) -c -o $@  $^ $(IFLAGS)
+
+#$(FORMANT-TARGET) : $(FORMANT-OBJECTS)
+#	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+$(WAV-TARGET) : $(WAV-OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+
+$(FFT-TARGET) : $(FFT-OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+$(IFFT-TARGET) : $(IFFT-OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+
+$(GRAPH-TARGET) : $(GRAPH-OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+$(PEAK-TARGET) : $(PEAK-OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+
+$(MIC-SRC-TARGET) : $(MIC-SRC-OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+
+$(STRETCH-SRC-TARGET) : $(STRETCH-SRC-OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+
+$(PLAY-TARGET) : $(PLAY-OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+
+$(REDUCE-TARGET) : $(REDUCE-OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+.PHONY: clean
+clean:
+	rm -f *.o $(WAV-TARGET) $(FFT-TARGET) $(GRAPH-TARGET) $(PEAK-TARGET) $(MIC-SRC-TARGET) $(STRETCH-SRC-TARGET) $(IFFT-TARGET) $(PLAY-TARGET) $(REDUCE-TARGET)

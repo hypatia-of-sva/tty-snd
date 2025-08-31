@@ -172,7 +172,7 @@ void write_amplitude_data(char* file_name, waveform_t data) {
 	fputc(((data.data_length*2)&0xFF0000)>>16, fp);
 	fputc(((data.data_length*2)&0xFF000000)>>24, fp);
 
-	//printf("len %li\n", data.data_length);
+	//printf("len %lli\n", data.data_length);
 
 	for(int i = 0; i < data.data_length; i++) {
 		fputc((data.amplitude_data[i]&0xFF), fp);

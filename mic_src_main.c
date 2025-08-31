@@ -116,7 +116,6 @@ int main(int argc, char** argv) {
         if(argc > 3 && strcmp(argv[3], "raw") == 0) {
             //Write raw pcm directly to stdout
             fwrite(buf, sizeof(int16_t), buffersize, stdout);
-            fprintf(stderr, "%s\n", "writing raw to stdout");
         }
         else if(argc > 3 && strcmp(argv[3], "wav") == 0) {
             simple_wav_t raw_form;

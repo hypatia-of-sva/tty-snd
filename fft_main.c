@@ -19,12 +19,12 @@ int main(int argc, char** argv) {
     simple_wav_t float_form = read_simple_wav(stdin);
 
 
-    fprintf(stderr, "before: nr = %li, ptr = %p\n", float_form.nr_sample_points, float_form.samples);
+    fprintf(stderr, "before: nr = %lli, ptr = %p\n", float_form.nr_sample_points, float_form.samples);
 
     float_form.nr_sample_points >>= size_red;
     float_form.samples = &(float_form.samples[float_form.nr_sample_points*index]);
 
-    fprintf(stderr, "after: nr = %li, ptr = %p\n", float_form.nr_sample_points, float_form.samples);
+    fprintf(stderr, "after: nr = %lli, ptr = %p\n", float_form.nr_sample_points, float_form.samples);
 
     float window_param = 1.0f;
     if(argc > 3 && strcmp(argv[3], "-w") == 0) {
