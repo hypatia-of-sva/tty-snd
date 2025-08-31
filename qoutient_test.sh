@@ -1,0 +1,1 @@
+./tty-snd-mic-src 0 5 | ./tty-snd-fft 0 0 | ./tty-snd-peaks
