@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
 
     float* amplitudes = transform_to_complex_array(form.amplitude_data, len);
 
-    simple_wav_t float_form;
+    simple_wav_t float_form = {0};
     float_form.frequency_in_hz = freq;
     float_form.nr_sample_points = 2*len;
     float_form.samples = amplitudes;

@@ -97,6 +97,29 @@ float* fft_power_of_two(float* data, size_t len);
 float* ifft_power_of_two(float* data, size_t len);
 
 
+
+
+/* cutoff_intervals.c */
+
+typedef struct interval_t {
+    size_t lower_index;
+    size_t upper_index;
+} interval_t;
+
+
+void find_intervals_above_cutoff(float* data, size_t len, float cutoff, interval_t** intervals_out, size_t* nr_intervals_out);
+
+void print_intervals(interval_t* intervals, size_t nr_intervals);
+
+void merge_interval_lists(interval_t* old_intervals, size_t nr_old_intervals, interval_t* new_intervals, size_t nr_new_intervals, interval_t** intervals_out, size_t* nr_intervals_out);
+
+void sort_interval_lists(interval_t* intervals, size_t nr_intervals);
+
+
+void get_sorted_iteratively_merged_interval_list_by_cutoff_step(float* data, size_t len, float cutoff_step, interval_t** intervals_out, size_t* nr_intervals_out);
+
+
+
 /* util.c */
 void write_dbl_array(double* data, size_t len, const char* filename);
 void write_float_array(float* data, size_t len, const char* filename);
@@ -124,13 +147,15 @@ int peak_by_freq_cmp_qsort(const void* pa, const void* pb);
 int peak_by_height_cmp_qsort(const void* pa, const void* pb);
 
 typedef struct peak_t {
+    interval_t underlying_interval;
     float freq;
     float height;
     int formant_nr;
     int merged_peaks;
     float rolloff_v;
+    int min_index;
 } peak_t;
-
+void debug_peaks(peak_t* peaks, size_t nr_peaks);
 
 char** split(const char* str, size_t len, char sep, int* out_num_strings);
 float *transform_float_to_complex_array(const float* old_array, size_t length);
@@ -146,26 +171,6 @@ void sleep_us(uint32_t us);
 
 
 
-
-
-/* cutoff_intervals.c */
-
-typedef struct interval_t {
-    size_t lower_index;
-    size_t upper_index;
-} interval_t;
-
-
-void find_intervals_above_cutoff(float* data, size_t len, float cutoff, interval_t** intervals_out, size_t* nr_intervals_out);
-
-void print_intervals(interval_t* intervals, size_t nr_intervals);
-
-void merge_interval_lists(interval_t* old_intervals, size_t nr_old_intervals, interval_t* new_intervals, size_t nr_new_intervals, interval_t** intervals_out, size_t* nr_intervals_out);
-
-void sort_interval_lists(interval_t* intervals, size_t nr_intervals);
-
-
-void get_sorted_iteratively_merged_interval_list_by_cutoff_step(float* data, size_t len, float cutoff_step, interval_t** intervals_out, size_t* nr_intervals_out);
 
 
 
@@ -184,6 +189,8 @@ typedef struct simple_wav_t {
     float frequency_in_hz;
     size_t nr_sample_points;
     float* samples;
+    size_t nr_peaks;
+    peak_t* peaks;
 } simple_wav_t;
 simple_wav_t read_simple_wav(FILE* fp);
 void write_simple_wav(FILE* fp, simple_wav_t data);

@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
             fprintf(stderr, "%s\n", "writing raw to stdout");
         }
         else if(argc > 3 && strcmp(argv[3], "wav") == 0) {
-            simple_wav_t raw_form;
+            simple_wav_t raw_form  = {0};
             raw_form.frequency_in_hz = 44100.0f;
             raw_form.nr_sample_points = truncate_power_of_2(buffersize/2);
             float* raw_copy = calloc(sizeof(float), raw_form.nr_sample_points);
@@ -143,7 +143,7 @@ int main(int argc, char** argv) {
             float * norm_copy = normalize_float_array(raw_copy, len);
             float* amplitudes = transform_float_to_complex_array(norm_copy, len);
 
-            simple_wav_t float_form;
+            simple_wav_t float_form = {0};
             float_form.frequency_in_hz = freq;
             float_form.nr_sample_points = 2*len;
             float_form.samples = amplitudes;

@@ -8,7 +8,7 @@ int main(int argc, char** argv) {
 
     simple_wav_t float_form = read_simple_wav(stdin);
 
-    simple_wav_t out_form;
+    simple_wav_t out_form = {0};
     out_form.frequency_in_hz = float_form.frequency_in_hz;
     out_form.nr_sample_points = 2*float_form.nr_sample_points;
     out_form.samples = calloc(sizeof(float), out_form.nr_sample_points);

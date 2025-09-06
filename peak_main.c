@@ -1,5 +1,8 @@
 #include "common.h"
 
+
+
+
 int main(int argc, char** argv) {
     simple_wav_t float_form = read_simple_wav(stdin);
 
@@ -19,23 +22,10 @@ int main(int argc, char** argv) {
 
 
     peak_t* peaks = calloc(nr_intervals, sizeof(peak_t));
-   /* float* rolloff_v = calloc(nr_intervals, sizeof(float)); */
     size_t nr_peaks = nr_intervals;
 
-    /*
-     *
-int peak_by_freq_cmp_qsort(const void* pa, const void* pb);
-int peak_by_height_cmp_qsort(const void* pa, const void* pb);
-
-typedef struct peak_t {
-    float freq;
-    float height;
-    int formant_nr;
-    int merged_peaks;
-} peak_t;
-     */
-
     for(int i = 0; i < nr_intervals; i++) {
+        peaks[i].underlying_interval = intervals[i];
         float upper_frequency_in_herz = freq * (((float)intervals[i].upper_index)/((float) len));
         float lower_frequency_in_herz = freq * (((float)intervals[i].lower_index)/((float) len));
         peaks[i].freq = (lower_frequency_in_herz + upper_frequency_in_herz) / 2;
@@ -50,24 +40,30 @@ typedef struct peak_t {
         //if(name == NULL) continue;
         //printf("F%i: %s (%fHz-%fHz); y = %f\n", i, name, lower_frequency_in_herz, upper_frequency_in_herz, peaks[i].height);
         //free(name);
+    }
+        //quick_sort_float(interval_formant_frequencies, nr_intervals);
+    qsort(peaks, nr_peaks, sizeof(peak_t), peak_by_freq_cmp_qsort);
+
+
+    for(int i = 0; i < nr_peaks; i++) {
         int bounds_for_calculating_rolloff_v;
-        if(i != nr_intervals-1) {
+        if(i != nr_peaks-1) {
             bounds_for_calculating_rolloff_v = intervals[i+1].lower_index;
         } else {
             bounds_for_calculating_rolloff_v = len - 1;
         }
-        int mid_index = intervals[i].upper_index+1;
+        int min_index = intervals[i].upper_index+1;
         float min_value;
         for(int j = intervals[i].upper_index+1; j <= bounds_for_calculating_rolloff_v; j++) {
             if(normalized_frequencies[j] < min_value) {
                 min_value = normalized_frequencies[j];
-                mid_index = j;
+                min_index = j;
             }
         }
         float criterion_height = min_value + 0.8f*(peaks[i].height - min_value);
-        int find_index = mid_index;
+        int find_index = min_index;
         float find_value = normalized_frequencies[find_index];
-        for(int j = mid_index+1; j > intervals[i].upper_index; j--) {
+        for(int j = min_index+1; j > intervals[i].upper_index; j--) {
             float curr = normalized_frequencies[j];
             if(curr > find_value) {
                 find_index = j;
@@ -79,10 +75,9 @@ typedef struct peak_t {
         }
         int delta_x = intervals[i].upper_index - find_index;
         float delta_y = peaks[i].height - find_value;
-        peaks[i].rolloff_v = delta_y/delta_x;
+        peaks[i].rolloff_v = -delta_y/delta_x;
+        peaks[i].min_index = min_index;
     }
-        //quick_sort_float(interval_formant_frequencies, nr_intervals);
-    qsort(peaks, nr_peaks, sizeof(peak_t), peak_by_freq_cmp_qsort);
 
 
 #define MIN_CENTS_OF_DIFFERENCE 20
@@ -120,60 +115,17 @@ typedef struct peak_t {
 
     qsort(peaks, nr_peaks, sizeof(peak_t), peak_by_freq_cmp_qsort);
 
-    for(int i = 0; i < nr_peaks; i++) {
 
-        int oct, note, cents;
-        if(peaks[i].freq == -1.0f) continue;
-        char* name = note_name(hz_to_octave(peaks[i].freq), &oct, &note, &cents);
-        if(name == NULL) continue;
-        printf("F%3i: %s; y = %7f (mp:%i); rolloff_v=%f\n", peaks[i].formant_nr, name, peaks[i].height, peaks[i].merged_peaks, peaks[i].rolloff_v);
-        free(name);
-
-    }
+    /* debug_peaks(peaks, nr_peaks); */
 
 
-    float* formant_distances = calloc(nr_intervals-1, sizeof(float));
-    float sum = 0.0f;
-    float avrg_rolloff_v = 0.0f;;
-    for(int i = 1; i < nr_intervals; i++) {
-        avrg_rolloff_v += peaks[i].rolloff_v / ((float)nr_intervals);
-        if(peaks[i].freq == -1.0f) continue;
-        float distance = peaks[i].freq-peaks[i-1].freq;
-        //printf("distance: %f\n", distance);
-        sum += distance;
-        formant_distances[i] = distance;
-    }
-    printf("\nAverage distance: %f\n", sum/nr_intervals);
-    printf("VTL in m = %f\n", 343.0/(2*(sum/nr_intervals)));
-    printf("Average rolloff v = %f\n", avrg_rolloff_v);
+    float_form.nr_peaks = nr_peaks;
+    float_form.peaks = peaks;
+    write_simple_wav(stdout, float_form);
 
-
-    //quick_sort_float(formant_distances, nr_intervals-1);
-    qsort(formant_distances, nr_intervals-1, sizeof(float), float_cmp_qsort);
-
-    printf("\nMean distance: %f\n", formant_distances[(nr_intervals-1)/2]);
-    printf("Mean VTL in m = %f\n", 343.0/(2*(formant_distances[(nr_intervals-1)/2])));
-
-    float min_sensible_distance = 100.0f; // in Hz
-    int min_idx = -1;
-    for(int i = 0; i < nr_intervals-1; i++) {
-        if(peaks[i].freq == -1.0f) continue;
-        if(formant_distances[i] > min_sensible_distance) {
-            min_idx = i;
-            break;
-        }
-    }
-    if(min_idx >= 0) {
-        int mean_sensible_index = ((nr_intervals-1) + min_idx)/2;
-
-        printf("\nMean sensible distance: %f\n", formant_distances[mean_sensible_index]);
-        printf("Mean sensible VTL in m = %f\n", 343.0/(2*(formant_distances[mean_sensible_index])));
-        printf("Percentage of sensible distances: %f\n", (1 - ((float)mean_sensible_index/((float) nr_intervals-1))));
-    }
 
 
     free(peaks);
-    free(formant_distances);
 
     return 0;
 }

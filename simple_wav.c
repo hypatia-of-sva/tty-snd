@@ -108,12 +108,89 @@ void check_input(FILE* fd, const char* text) {
 
 
 
-const char* appdata = "VER: 0";
+char* appdata_basic = "VER: 0";
+char* appdata_peaks_intro = "VER: 1 peaks=";
+
+
+
+
+
+
+char* format_peak_structs(peak_t* peaks, size_t nr_peaks, int* bufsize_out) {
+    int bufsize = 0;
+    for(int i = 0; i < nr_peaks; i++) {
+        bufsize += snprintf(NULL, 0, "%f:%f:%i:%i:%f:%i:%zu:%zu|",
+            peaks[i].freq, peaks[i].height, peaks[i].formant_nr, peaks[i].merged_peaks, peaks[i].rolloff_v, peaks[i].min_index, peaks[i].underlying_interval.lower_index, peaks[i].underlying_interval.upper_index);
+    }
+    char* buf = calloc(bufsize+1,1);
+    int cur_index = 0;
+    for(int i = 0; i < nr_peaks; i++) {
+        cur_index += snprintf(&(buf[cur_index]), bufsize, "%f:%f:%i:%i:%f:%i:%zu:%zu|",
+            peaks[i].freq, peaks[i].height, peaks[i].formant_nr, peaks[i].merged_peaks, peaks[i].rolloff_v, peaks[i].min_index, peaks[i].underlying_interval.lower_index, peaks[i].underlying_interval.upper_index);
+    }
+    bufsize_out[0] = bufsize+1;
+    return buf;
+}
+void parse_peak_structs(char* data, size_t len, peak_t** peaks_out, size_t* nr_peaks_out) {
+    int nr_peaks;
+    char** peak_strs = split(data, len, '|', &nr_peaks);
+    peak_t* peaks = calloc(nr_peaks, sizeof(peak_t));
+    for(int i = 0; i < nr_peaks; i++) {
+        sscanf(peak_strs[i], "%f:%f:%i:%i:%f:%i:%zu:%zu",
+            &peaks[i].freq, &peaks[i].height, &peaks[i].formant_nr, &peaks[i].merged_peaks, &peaks[i].rolloff_v, &peaks[i].min_index, &peaks[i].underlying_interval.lower_index, &peaks[i].underlying_interval.upper_index);
+        free(peak_strs[i]);
+    }
+    free(peak_strs);
+    peaks_out[0] = peaks;
+    nr_peaks_out[0] = nr_peaks;
+
+/*
+
+    int nr_peaks;
+    for(int i = 0; i < len; i++) {
+        if(data[i] == '|') nr_peaks++;
+    }
+    peak_t* peaks = calloc(nr_peaks, sizeof(peak_t));
+
+    int cur_index = 0;
+    for(int i = 0; i < nr_peaks; i++) {
+        int this_time_read = 0;
+        sscanf(&(data[cur_index]), "%f:%f:%i:%i:%f:%i|%n",
+            &peaks[i].freq, &peaks[i].height, &peaks[i].formant_nr, &peaks[i].merged_peaks, &peaks[i].rolloff_v, &peaks[i].min_index, &this_time_read);
+        fprintf(stderr, "read: %i of %zu (round %i of %i)\n", cur_index, len, i, nr_peaks);
+        cur_index += this_time_read;
+    }
+
+    peaks_out[0] = peaks;
+    nr_peaks_out[0] = nr_peaks;
+*/
+}
+
+
+
+
 
 void write_simple_wav(FILE* fp, simple_wav_t data) {
+    char* appdata = NULL;
+    if(data.nr_peaks == 0 || data.peaks == NULL) {
+        appdata = appdata_basic;
+    } else {
+        int struct_bufsize = 0;
+        char* struct_buf = format_peak_structs(data.peaks, data.nr_peaks, &struct_bufsize);
+        size_t allocsize = strlen(appdata_peaks_intro) + struct_bufsize;
+        fprintf(stderr, "alloc size appdata = %zu", allocsize);
+        appdata = calloc(allocsize, 1); /* struct_bufsize already includes NUL */
+        memmove(appdata, appdata_peaks_intro, strlen(appdata_peaks_intro));
+        memmove(&appdata[strlen(appdata_peaks_intro)], struct_buf, struct_bufsize);
+        free(struct_buf);
+    }
+    /*fprintf(stderr, "out: appdata=|%s|\n", appdata);
+    fprintf(stderr, "out: peaknr = %zu, ptr = %p\n", data.nr_peaks, data.peaks); */
+
+
     /* basic AIFF header */
     fprintf(fp, "FORM");
-    write_i32be(fp, 84 + sizeof(appdata) + sizeof(float)*data.nr_sample_points);
+    write_i32be(fp, 84 + strlen(appdata) + sizeof(float)*data.nr_sample_points);
     fprintf(fp, "AIFC");
     fprintf(fp, "FVER");
     write_i32be(fp, 4);
@@ -126,17 +203,20 @@ void write_simple_wav(FILE* fp, simple_wav_t data) {
     write_i16be(fp, 1); /* 1 channel */
     write_i32be(fp, data.nr_sample_points);
     write_i16be(fp, 32);
-    char extended[10];
+    char extended[10] = {0};
     convert_to_extended_float_be((double) data.frequency_in_hz, &extended[0]);
     fwrite(&extended[0], 10, 1, fp);
     fprintf(fp, "fl32");
     afputc(0, fp);
     afputc(0, fp);
     fprintf(fp, "APPL");
-    write_i32be(fp, sizeof(appdata)+12);
+
+    write_i32be(fp, strlen(appdata)+12);
     fprintf(fp, "stoc");
     fprintf(fp, "\7tty-snd"); /* application id */
-    fwrite(appdata, 1, sizeof(appdata), fp);
+    fwrite(appdata, 1, strlen(appdata), fp);
+
+
     fprintf(fp, "SSND");
     size_t ssnd_block_size = sizeof(float)*data.nr_sample_points+8;
     write_i32be(fp, ssnd_block_size);
@@ -151,7 +231,7 @@ void write_simple_wav(FILE* fp, simple_wav_t data) {
 }
 
 simple_wav_t read_simple_wav(FILE* fp) {
-    simple_wav_t ret;
+    simple_wav_t ret = {0};
     int32_t size_to_read;
 
     check_input(fp, "FORM");
@@ -180,12 +260,25 @@ simple_wav_t read_simple_wav(FILE* fp) {
     assert(afgetc(fp) == (char) 0);                 size_to_read -= 1;
     assert(afgetc(fp) == (char) 0);                 size_to_read -= 1;
     check_input(fp, "APPL");                        size_to_read -= 4;
-    assert(read_i32be(fp) == sizeof(appdata)+12);   size_to_read -= 4;
+
+    int32_t appdata_size;
+    appdata_size = read_i32be(fp)-12;               size_to_read -= 4;
+
     check_input(fp, "stoc");                        size_to_read -= 4;
     check_input(fp, "\7tty-snd");                   size_to_read -= 8;
-    char* appdata_buf = malloc(sizeof(appdata));
-    fread(appdata_buf, 1, sizeof(appdata), fp);         size_to_read -= sizeof(appdata);
-    assert(strcmp(appdata, appdata_buf) == 0);
+    char* appdata_buf = malloc(appdata_size);
+    fread(appdata_buf, 1, appdata_size, fp);         size_to_read -= appdata_size;
+
+    if(appdata_size == strlen(appdata_basic)) {
+        assert(strcmp(appdata_basic, appdata_buf) == 0);
+    } else {
+        fprintf(stderr, "appdata_size=%i\n", appdata_size);
+        assert(appdata_size > strlen(appdata_peaks_intro));
+        assert(strncmp(appdata_buf, appdata_peaks_intro, strlen(appdata_peaks_intro)) == 0);
+        parse_peak_structs(&appdata_buf[strlen(appdata_peaks_intro)], appdata_size-strlen(appdata_peaks_intro), &ret.peaks, &ret.nr_peaks);
+    }
+
+
     check_input(fp, "SSND");                                            size_to_read -= 4;
     assert(read_i32be(fp) == expected_size);    size_to_read -= 4;
     assert(read_i32be(fp) == 0);                   size_to_read -= 4;

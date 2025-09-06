@@ -294,7 +294,7 @@ char** split(const char* str, size_t len, char sep, int* out_num_strings) {
   in_sep = (str[0] == sep);
   int first_char = 0;
   for(int i = 0; i < len; i++) {
-    if(str[i] == sep && !in_sep) {
+    if(str[i] == sep && !in_sep && i != len-1) {
       size_t new_len = i - first_char + 1;
       split_strings[str_idx] = malloc(new_len);
       memmove(split_strings[str_idx], &str[first_char], new_len-1);
@@ -315,4 +315,72 @@ char** split(const char* str, size_t len, char sep, int* out_num_strings) {
   assert(str_idx+1 == out_num_strings[0]);
 
   return split_strings;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void debug_peaks(peak_t* peaks, size_t nr_peaks) {
+    for(int i = 0; i < nr_peaks; i++) {
+        int oct, note, cents;
+        if(peaks[i].freq == -1.0f) continue;
+        fprintf(stderr, "raw peak freq = %f\n", peaks[i].freq);
+        char* name = note_name(hz_to_octave(peaks[i].freq), &oct, &note, &cents);
+        if(name == NULL) continue;
+        fprintf(stderr, "F%3i: %s; y = %7f (mp:%i); rolloff_v=%f\n", peaks[i].formant_nr, name, peaks[i].height, peaks[i].merged_peaks, peaks[i].rolloff_v);
+        free(name);
+    }
+
+
+    float* formant_distances = calloc(nr_peaks-1, sizeof(float));
+    float sum = 0.0f;
+    float avrg_rolloff_v = 0.0f;;
+    for(int i = 1; i < nr_peaks; i++) {
+        avrg_rolloff_v += peaks[i].rolloff_v / ((float)nr_peaks);
+        if(peaks[i].freq == -1.0f) continue;
+        float distance = peaks[i].freq-peaks[i-1].freq;
+        //printf("distance: %f\n", distance);
+        sum += distance;
+        formant_distances[i-1] = distance;
+    }
+    fprintf(stderr, "\nAverage distance: %f\n", sum/nr_peaks);
+    fprintf(stderr, "VTL in m = %f\n", 343.0/(2*(sum/nr_peaks)));
+    fprintf(stderr, "Average rolloff v = %f\n", avrg_rolloff_v);
+
+
+    quick_sort_float(formant_distances, nr_peaks-1);
+    /* qsort(formant_distances, nr_peaks-1, sizeof(float), float_cmp_qsort); */
+
+    fprintf(stderr, "\nMean distance: %f\n", formant_distances[(nr_peaks-1)/2]);
+    fprintf(stderr, "Mean VTL in m = %f\n", 343.0/(2*(formant_distances[(nr_peaks-1)/2])));
+
+    float min_sensible_distance = 100.0f; // in Hz
+    int min_idx = -1;
+    for(int i = 0; i < nr_peaks-1; i++) {
+        if(peaks[i].freq == -1.0f) continue;
+        if(formant_distances[i] > min_sensible_distance) {
+            min_idx = i;
+            break;
+        }
+    }
+    if(min_idx >= 0) {
+        int mean_sensible_index = ((nr_peaks-1) + min_idx)/2;
+
+        fprintf(stderr, "\nMean sensible distance: %f\n", formant_distances[mean_sensible_index]);
+        fprintf(stderr, "Mean sensible VTL in m = %f\n", 343.0/(2*(formant_distances[mean_sensible_index])));
+        fprintf(stderr, "Percentage of sensible distances: %f\n", (1 - ((float)mean_sensible_index/((float) nr_peaks-1))));
+    }
+
+    free(formant_distances);
 }

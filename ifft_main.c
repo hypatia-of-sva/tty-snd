@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
 
     float* fft_array = ifft_power_of_two(float_form.samples, float_form.nr_sample_points);
 
-    simple_wav_t out_form;
+    simple_wav_t out_form = {0};
     out_form.frequency_in_hz = float_form.frequency_in_hz;
     out_form.nr_sample_points = float_form.nr_sample_points;
     out_form.samples = fft_array;
