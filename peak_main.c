@@ -48,13 +48,13 @@ int main(int argc, char** argv) {
     for(int i = 0; i < nr_peaks; i++) {
         int bounds_for_calculating_rolloff_v;
         if(i != nr_peaks-1) {
-            bounds_for_calculating_rolloff_v = intervals[i+1].lower_index;
+            bounds_for_calculating_rolloff_v = peaks[i+1].underlying_interval.lower_index;
         } else {
             bounds_for_calculating_rolloff_v = len - 1;
         }
-        int min_index = intervals[i].upper_index+1;
+        int min_index = peaks[i].underlying_interval.upper_index+1;
         float min_value;
-        for(int j = intervals[i].upper_index+1; j <= bounds_for_calculating_rolloff_v; j++) {
+        for(int j = peaks[i].underlying_interval.upper_index+1; j <= bounds_for_calculating_rolloff_v; j++) {
             if(normalized_frequencies[j] < min_value) {
                 min_value = normalized_frequencies[j];
                 min_index = j;
@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
         float criterion_height = min_value + 0.8f*(peaks[i].height - min_value);
         int find_index = min_index;
         float find_value = normalized_frequencies[find_index];
-        for(int j = min_index+1; j > intervals[i].upper_index; j--) {
+        for(int j = min_index+1; j > peaks[i].underlying_interval.upper_index; j--) {
             float curr = normalized_frequencies[j];
             if(curr > find_value) {
                 find_index = j;
@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
                 break;
             }
         }
-        int delta_x = intervals[i].upper_index - find_index;
+        int delta_x = peaks[i].underlying_interval.upper_index - find_index;
         float delta_y = peaks[i].height - find_value;
         peaks[i].rolloff_v = -delta_y/delta_x;
         peaks[i].min_index = min_index;

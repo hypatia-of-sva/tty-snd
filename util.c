@@ -58,6 +58,15 @@ int peak_by_height_cmp_qsort(const void* pa, const void* pb) {
 }
 
 
+int formant_by_freq_cmp_qsort(const void* pa, const void* pb) {
+    formant_t a = ((formant_t*)pa)[0];
+    formant_t b = ((formant_t*)pb)[0];
+    if(a.freq == b.freq) return 0;
+    if(a.freq > b.freq) return 1;
+    else return -1;
+}
+
+
 void quick_sort_float(float* array, size_t len) {
     /* iterative quicksort, adapted from https://www.geeksforgeeks.org/iterative-quick-sort/ */
     int* stack = calloc(len,sizeof(int));
@@ -332,6 +341,9 @@ char** split(const char* str, size_t len, char sep, int* out_num_strings) {
 
 
 void debug_peaks(peak_t* peaks, size_t nr_peaks) {
+    long double rolloff, rolloff_num = 0, rolloff_denom = 0;
+    long double avrg_peak_height = 0.0, avrg_peak_freq = 0.0;
+
     for(int i = 0; i < nr_peaks; i++) {
         int oct, note, cents;
         if(peaks[i].freq == -1.0f) continue;
@@ -340,7 +352,23 @@ void debug_peaks(peak_t* peaks, size_t nr_peaks) {
         if(name == NULL) continue;
         fprintf(stderr, "F%3i: %s; y = %7f (mp:%i); rolloff_v=%f\n", peaks[i].formant_nr, name, peaks[i].height, peaks[i].merged_peaks, peaks[i].rolloff_v);
         free(name);
+
+        avrg_peak_height += peaks[i].height;
+        avrg_peak_freq += peaks[i].freq;
     }
+    avrg_peak_height /= nr_peaks;
+    avrg_peak_freq /= nr_peaks;
+
+    for(int i = 0; i < nr_peaks; i++) {
+        rolloff_num += (peaks[i].height - avrg_peak_height)*peaks[i].freq;
+        rolloff_denom += (peaks[i].freq - avrg_peak_freq)*peaks[i].freq;
+    }
+    rolloff = rolloff_num / rolloff_denom;
+
+    fprintf(stderr, "\naverages: %Lf, %Lf\n\n´", avrg_peak_height, avrg_peak_freq);
+
+
+    fprintf(stderr, "\nRolloff curve rise: %Le\n\n´", rolloff);
 
 
     float* formant_distances = calloc(nr_peaks-1, sizeof(float));
