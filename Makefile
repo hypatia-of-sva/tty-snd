@@ -67,7 +67,7 @@ CHANGE_ROLLOFF_SLOPE-OBJECTS = $(CHANGE_ROLLOFF_SLOPE-SOURCES:.c=.o)
 CHANGE_ROLLOFF_SLOPE-TARGET = tty-snd-change_rolloff_slope
 
 
-NFTEST-SOURCES = newformant_test_main.c lpc.c root.c $(COMMON-SOURCES)
+NFTEST-SOURCES = newformant_test_main.c lpc.c root.c marple-alg_2.c informant_algs.c $(COMMON-SOURCES)
 NFTEST-OBJECTS = $(NFTEST-SOURCES:.c=.o)
 NFTEST-TARGET = tty-snd-nftest
 

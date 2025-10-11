@@ -216,5 +216,22 @@ double convert_from_extended_float_be(char* inptr);
 float* lpc_coefficients_rosa(float* data, size_t len, int order);
 double* lpc_coefficients_rosa_double(double* data, size_t len, int order);
 
+/* marple_alg_2.c */
+int ar_params (double *x_in /* data */,
+     int n /* num_values */,
+     int mmax /* nr_formants */,
+     float tol1, float tol2 /* tolerances */,
+     int* out_m /* out_calculated */,
+     double *a_in /* out_ar_params, has to have nr_formants space */,
+     float *out_e /* out_pred_error_energy_order_m */,
+     float *out_e0 /* out_twice_total_energy */
+     );
+/* informant_algs.c */
+
+double* autocorr_solve(const double *data, int length, int lpcOrder, double *pGain, size_t* out_nr_formants);
+double* Covar_solve(const double *data, int length, int lpcOrder, double *pGain, size_t* out_nr_formants);
+double* Burg_solve(const double *x, int length, int lpcOrder, double *pGain, size_t* out_nr_formants);
+
+
 
 #endif
