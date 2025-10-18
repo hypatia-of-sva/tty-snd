@@ -12,8 +12,9 @@ double* autocorr_solve(const double *data, int length, int lpcOrder, double *pGa
     const int n = length;
     const int m = lpcOrder;
 
-
+    printf("allocate size: %zu\n", (m+2)*sizeof(double));
     double* r = calloc(m+2, sizeof(double));
+    printf("bug here");
     double* a = calloc(m+2, sizeof(double));
     double* rc = calloc(m+2, sizeof(double));
 

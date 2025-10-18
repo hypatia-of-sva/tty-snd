@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 
 
 
-
+    /*
 
     printf("lpc = [");
     double* lpc_params = lpc_coefficients_rosa_double(data, out_form.nr_sample_points, order);
@@ -44,19 +44,28 @@ int main(int argc, char** argv) {
     double* marple_lpc = calloc(order+1, sizeof(double));
     float e, e0; int nr_formants_calculated;
     int status = ar_params(data, out_form.nr_sample_points, order, 0.005, 0.005, &nr_formants_calculated, marple_lpc, &e, &e0);
-    if(status != 0) {
+    if(status == 0) {
         printf("marple_lpc = [");
         for(int i = 0; i < nr_formants_calculated; i++) {
             printf("%f,", marple_lpc[i]);
         }
         printf("]\n");
+    } else {
+        printf("marple lpc error = %i\n", status);
     }
-
+    */
 
     double autocorr_gain, covar_gain, burg_gain; size_t autocorr_nr, covar_nr, burg_nr;
+
+
     double* autocorr = autocorr_solve(data, out_form.nr_sample_points*2, order+1, &autocorr_gain, &autocorr_nr);
+    printf("autocorr done\n");
+
     double* covar = Covar_solve(data, out_form.nr_sample_points*2, order+1, &covar_gain, &covar_nr);
+    printf("covar done\n");
+
     double* burg = Burg_solve(data, out_form.nr_sample_points*2, order+1, &burg_gain, &burg_nr);
+    printf("burg done\n");
 
     printf("autocorr = [");
     for(int i = 0; i < autocorr_nr; i++) {
