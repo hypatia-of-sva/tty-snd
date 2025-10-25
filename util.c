@@ -344,9 +344,18 @@ void debug_peaks(peak_t* peaks, size_t nr_peaks) {
     long double rolloff, rolloff_num = 0, rolloff_denom = 0;
     long double avrg_peak_height = 0.0, avrg_peak_freq = 0.0;
 
+
+    typedef struct formant_info_t {
+        double octave_nr, max_amp; int lowest_formant, highest_harmonic;
+        bool sorted_out;
+    } formant_info_t;
+    formant_info_t* finfos = calloc(nr_peaks,sizeof(formant_info_t));
+    int nr_found = 0;
+
     for(int i = 0; i < nr_peaks; i++) {
         int oct, note, cents;
         if(peaks[i].freq == -1.0f) continue;
+        if(peaks[i].height < 0.01) continue;
         fprintf(stderr, "raw peak freq = %f\n", peaks[i].freq);
         char* name = note_name(hz_to_octave(peaks[i].freq), &oct, &note, &cents);
         if(name == NULL) continue;
@@ -355,7 +364,58 @@ void debug_peaks(peak_t* peaks, size_t nr_peaks) {
 
         avrg_peak_height += peaks[i].height;
         avrg_peak_freq += peaks[i].freq;
+
+        double octave_nr = hz_to_octave(peaks[i].freq);
+        if(nr_found == 0) {
+            finfos[0].octave_nr = octave_nr;
+            finfos[0].max_amp = peaks[i].height;
+            finfos[0].highest_harmonic = 0;
+            finfos[0].lowest_formant = peaks[i].formant_nr;
+            nr_found++;
+        } else {
+            bool found = false;
+            for(int j = nr_found; j > 0; j--) {
+                double octave_difference = finfos[j-1].octave_nr - octave_nr;
+                octave_difference = fabs(octave_difference);
+                octave_difference = octave_difference - floor(octave_difference);
+                if(fabs(octave_difference) < 30.0/1200.0) {
+                    if(peaks[i].height > finfos[j-1].max_amp) {
+                        finfos[j-1].max_amp = peaks[i].height;
+                    }
+                    if(peaks[i].formant_nr < finfos[i].lowest_formant) {
+                        finfos[j-1].lowest_formant = peaks[i].formant_nr;
+                    }
+                    finfos[j-1].highest_harmonic++;
+                    found = true;
+                }
+            }
+            if(!found) {
+                finfos[nr_found].octave_nr = octave_nr;
+                finfos[nr_found].max_amp = peaks[i].height;
+                finfos[nr_found].highest_harmonic = 0;
+                finfos[nr_found].lowest_formant = peaks[i].formant_nr;
+                nr_found++;
+            }
+        }
     }
+
+    fprintf(stderr, "%i formants found: \n", nr_found);
+    for(int j = 0; j < nr_found; j++) {
+        int oct, note, cents;
+        char* name = note_name(finfos[j].octave_nr, &oct, &note, &cents);
+        if(name == NULL) {
+            fprintf(stderr, "peak %i failed to convert to a note!", j);
+        } else {
+            fprintf(stderr, "%i (F%i): %s + %i harmonics; y = %7f\n", j, finfos[j].lowest_formant, name, finfos[j].highest_harmonic, finfos[j].max_amp);
+
+        }
+
+
+    }
+
+
+
+
     avrg_peak_height /= nr_peaks;
     avrg_peak_freq /= nr_peaks;
 
