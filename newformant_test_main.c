@@ -1,6 +1,6 @@
 #include "common.h"
-
-
+#define FORMANTS_IMPLEMENTATION
+#include "libformants.h"
 
 
 int main(int argc, char** argv) {
@@ -29,6 +29,21 @@ int main(int argc, char** argv) {
 
 
 
+    formants_work_t *work = formants_make_work(out_form.nr_sample_points, order);
+
+    unsigned long libf_formantCount;
+    libf_formant_t *libf_formants = formants_analyze(
+                    work, data, out_form.nr_sample_points, order,
+                    out_form.frequency_in_hz, 100,
+                    &libf_formantCount);
+
+    printf("Nr of found formants: %li\n", libf_formantCount);
+    for(int i = 0; i < libf_formantCount; i++) {
+        printf("Formant %i = %f Hz +- %f\n", i, libf_formants[i].frequency, libf_formants[i].bandwidth);
+    }
+
+
+    return 0;
 
 
 

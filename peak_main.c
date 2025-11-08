@@ -6,6 +6,9 @@
 int main(int argc, char** argv) {
     simple_wav_t float_form = read_simple_wav(stdin);
 
+    assert(argc > 2);
+    float nr_of_steps = 1.0f/atof(argv[1]);
+    int min_cents_difference = atof(argv[2]);
 
     //fprintf(stderr, "peaks: f = %f\n", float_form.frequency_in_hz);
 
@@ -18,7 +21,7 @@ int main(int argc, char** argv) {
 
     interval_t* intervals;
     size_t nr_intervals;
-    get_sorted_iteratively_merged_interval_list_by_cutoff_step(normalized_frequencies, len/2, 0.01, &intervals, &nr_intervals);
+    get_sorted_iteratively_merged_interval_list_by_cutoff_step(normalized_frequencies, len/2, nr_of_steps, &intervals, &nr_intervals);
 
 
     peak_t* peaks = calloc(nr_intervals, sizeof(peak_t));
@@ -90,7 +93,7 @@ int main(int argc, char** argv) {
             float next_height = peaks[i+1].height;
             float distance = hz_to_octave(next_freq)-hz_to_octave(curr_freq);
             float cents = distance*12*100;
-            bool should_be_merged = (cents < MIN_CENTS_OF_DIFFERENCE);
+            bool should_be_merged = (cents < min_cents_difference);
 
             //printf("curf=%f,nxf=%f,curh=%f,nxh=%f,dis=%f,cents=%f,sbm=%i\n", curr_freq, next_freq, curr_height, next_height, distance, cents, should_be_merged);
 
