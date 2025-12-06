@@ -1,0 +1,8 @@
+*.o
+*.aiff
+*.txt
+*.bin
+*.dat
+tty-snd-*
+ansatz
+peak_dbg_text_*
