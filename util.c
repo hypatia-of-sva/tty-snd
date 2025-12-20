@@ -103,6 +103,7 @@ void quick_sort_float(float* array, size_t len) {
     }
     free(stack);
 }
+#ifdef HAS_RAYLIB
 Vector2* create_graph_from_float_array (float* array, size_t length, float base_x, float base_y, float max_x, float max_y) {
     Vector2* graph = malloc(length*sizeof(Vector2));
     for(int i = 0; i < length; i++) {
@@ -111,6 +112,7 @@ Vector2* create_graph_from_float_array (float* array, size_t length, float base_
     }
     return graph;
 }
+#endif
 float *normalize_int_array(int16_t* old_array, size_t length) {
     int max_pos; int16_t max_to_normalize_by = 0;
     maximum_abs_value_and_position_int_array(old_array, length, &max_pos, &max_to_normalize_by);

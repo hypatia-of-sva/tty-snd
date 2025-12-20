@@ -2,7 +2,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#ifdef HAS_RAYLIB
 #include "raylib.h"
+#endif
+
 #include "alad.h"
 
 #include <stdint.h>
@@ -39,8 +42,8 @@ void print_matrix(matrix_t mat);
 
 float get(matrix_t mat, int col, int row);
 void set(matrix_t mat, int col, int row, float val);
-
-
+matrix_t invert_matrix(matrix_t mat_input);
+matrix_t matrix_multiply(matrix_t a, matrix_t b);
 
 
 /* bmp.c */
@@ -136,8 +139,9 @@ void maximum_abs_value_and_position_float_array(const float* array, size_t lengt
 float *normalize_int_array(int16_t* old_array, size_t length);
 float *normalize_float_array(float* old_array, size_t length);
 int16_t *transform_complex_to_int_array(const float* old_array, size_t length);
-
+#ifdef HAS_RAYLIB
 Vector2* create_graph_from_float_array (float* array, size_t length, float base_x, float base_y, float max_x, float max_y);
+#endif
 int float_cmp_qsort(const void* pa, const void* pb);
 int formant_by_freq_cmp_qsort(const void* pa, const void* pb);
 
@@ -233,5 +237,9 @@ double* Covar_solve(const double *data, int length, int lpcOrder, double *pGain,
 double* Burg_solve(const double *x, int length, int lpcOrder, double *pGain, size_t* out_nr_formants);
 
 
+
+
+/* r_formant_code */
+void r_find_formants(double* sound, size_t len, double frequency, int order, int maxbw, int minformant, double* formants, double* bws, bool* is_selected);
 
 #endif

@@ -93,3 +93,60 @@ matrix_t gaussian(matrix_t mat_input, matrix_t v) {
     destroy_matrix(mat);
     return res;
 }
+
+
+
+
+matrix_t invert_matrix(matrix_t mat_input) {
+    assert(mat_input.width == mat_input.height);
+    matrix_t mat = copy_matrix(mat_input);
+    matrix_t res = create_matrix(mat_input.width,mat_input.height);
+    for(int i = 0; i < mat_input.width; i++) {
+		set(res, i, i, 1.0);
+	}
+
+    for(int col = 0; col < mat.width; col++) {
+        if(get(mat, col, col) == 0.0f) {
+            for(int row = col; row < mat.height; row++) {
+                if(get(mat, col, row) != 0.0f) {
+                    swap_rows(mat, row, col);
+                    swap_rows(res, row, col);
+                    break;
+                }
+            }
+            die("matrix inadequate!\n");
+        }
+        float divide_factor = 1/get(mat, col, col);
+        multiply_row_by(mat, col, divide_factor);
+        multiply_row_by(res, col, divide_factor);
+        for(int row = 0; row < mat.height; row++) {
+            if(row != col) {
+            float factor = get(mat, col, row);
+            add_multiple_of_row(mat, row, col, -factor);
+            add_multiple_of_row(res, row, col, -factor);
+            }
+        }
+    }
+
+
+    destroy_matrix(mat);
+    return res;
+}
+
+
+
+
+matrix_t matrix_multiply(matrix_t a, matrix_t b) {
+	assert(a.width == b.height);
+	matrix_t res = create_matrix(b.width, a.height);
+	for(int i = 0; i < a.height; i++) {
+		for(int j = 0; j < b.width; j++) {
+			double sum = 0.0;
+			for(int k = 0; k < a.width; k++) {
+				sum += get(a, k, i)*get(b, j, k);
+			}
+			set(res, i, j, sum);
+		}
+	}
+	return res;
+}

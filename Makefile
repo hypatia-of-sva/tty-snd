@@ -1,10 +1,12 @@
 CC = gcc
 CFLAGS = -Wall -Werror -g
 #-std=c90
-RAYLIB_FOLDER = ../../tool_2/raylib
-LDFLAGS =  -lm -L../../tool_2/raylib/src/ -lraylib
+# RAYLIB_FOLDER = ../../tool_2/raylib
+LDFLAGS =  -lm 
+#-L../../tool_2/raylib/src/ -lraylib
 #-lgsl -lgslcblas
-IFLAGS = -I. -I../../tool_2/raylib/src/
+IFLAGS = -I. 
+#-I../../tool_2/raylib/src/
 
 
 COMMON-SOURCES = util.c simple_wav.c f80.c alad.c
@@ -24,9 +26,9 @@ WAV-TARGET = tty-snd-wav
 
 
 
-GRAPH-SOURCES = graph_main.c $(COMMON-SOURCES)
-GRAPH-OBJECTS = $(GRAPH-SOURCES:.c=.o)
-GRAPH-TARGET = tty-snd-graph
+#GRAPH-SOURCES = graph_main.c $(COMMON-SOURCES)
+#GRAPH-OBJECTS = $(GRAPH-SOURCES:.c=.o)
+#GRAPH-TARGET = tty-snd-graph
 
 PEAK-SOURCES = cutoff_intervals.c peak_main.c $(COMMON-SOURCES)
 PEAK-OBJECTS = $(PEAK-SOURCES:.c=.o)
@@ -71,7 +73,7 @@ CHANGE_ROLLOFF_SLOPE-OBJECTS = $(CHANGE_ROLLOFF_SLOPE-SOURCES:.c=.o)
 CHANGE_ROLLOFF_SLOPE-TARGET = tty-snd-change_rolloff_slope
 
 
-NFTEST-SOURCES = newformant_test_main.c lpc.c root.c marple-alg_2.c informant_algs.c $(COMMON-SOURCES)
+NFTEST-SOURCES = newformant_test_2_main.c lpc.c root.c marple-alg_2.c informant_algs.c r_formant_code.c gauss.c $(COMMON-SOURCES)
 NFTEST-OBJECTS = $(NFTEST-SOURCES:.c=.o)
 NFTEST-TARGET = tty-snd-nftest
 
@@ -84,7 +86,8 @@ WNDW-OBJECTS = $(WNDW-SOURCES:.c=.o)
 WNDW-TARGET = tty-snd-wndw
 
 .PHONY: all
-all: $(WAV-TARGET) $(FFT-TARGET) $(GRAPH-TARGET) $(PEAK-TARGET) $(MIC-SRC-TARGET) $(STRETCH-SRC-TARGET) $(IFFT-TARGET) $(PLAY-TARGET) $(REDUCE-TARGET) $(PEAK-DBG-TARGET) $(CHANGE_ROLLOFF_VELOCITY-TARGET) $(CHANGE_ROLLOFF_SLOPE-TARGET) $(NFTEST-TARGET) $(BFILTER-TARGET) $(WNDW-TARGET) $(COMPLEXIFY-TARGET)
+all: $(WAV-TARGET) $(FFT-TARGET)  $(PEAK-TARGET) $(MIC-SRC-TARGET) $(STRETCH-SRC-TARGET) $(IFFT-TARGET) $(PLAY-TARGET) $(REDUCE-TARGET) $(PEAK-DBG-TARGET) $(CHANGE_ROLLOFF_VELOCITY-TARGET) $(CHANGE_ROLLOFF_SLOPE-TARGET) $(NFTEST-TARGET) $(BFILTER-TARGET) $(WNDW-TARGET) $(COMPLEXIFY-TARGET)
+#$(GRAPH-TARGET)
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c -o $@  $^ $(IFLAGS)
@@ -103,8 +106,8 @@ $(IFFT-TARGET) : $(IFFT-OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 
-$(GRAPH-TARGET) : $(GRAPH-OBJECTS)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+#$(GRAPH-TARGET) : $(GRAPH-OBJECTS)
+#	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 $(PEAK-TARGET) : $(PEAK-OBJECTS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
