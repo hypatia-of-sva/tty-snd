@@ -2,6 +2,52 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+/*
+ * =============================================================================
+ * Platform Compatibility
+ * =============================================================================
+ */
+
+#ifdef _WIN32
+    /*
+     * Windows/Raylib Symbol Conflicts
+     * 
+     * Both windows.h and raylib.h define common names like CloseWindow, Rectangle, etc.
+     * We include windows.h first (via unistd.h) with minimal features, then undefine
+     * the conflicting symbols before including raylib.h.
+     */
+    #define WIN32_LEAN_AND_MEAN
+    #define NOGDI
+    #define NOUSER
+    #include <unistd.h>
+    #undef CloseWindow
+    #undef ShowCursor
+    #undef Rectangle
+    #undef PlaySound
+    #undef DrawText
+    #undef DrawTextEx
+    #undef LoadImage
+    #undef SaveImage
+    #undef GetObject
+#endif
+
+/*
+ * Binary Mode for Pipes (Cross-Platform)
+ * 
+ * Windows pipes default to text mode, which corrupts binary data by
+ * translating LF <-> CRLF. Unix pipes are always binary.
+ * 
+ * NOTE: PowerShell corrupts binary pipes regardless of this setting.
+ *       Use cmd.exe for piped commands on Windows.
+ */
+#ifdef _WIN32
+    #include <fcntl.h>
+    #include <io.h>
+    #define SET_BINARY_MODE(fp) _setmode(_fileno(fp), _O_BINARY)
+#else
+    #define SET_BINARY_MODE(fp) ((void)0)
+#endif
+
 #ifdef HAS_RAYLIB
 #include "raylib.h"
 #endif

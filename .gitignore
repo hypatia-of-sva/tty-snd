@@ -1,8 +1,10 @@
-*.o
-*.aiff
-*.txt
+# Build directories
+build/
+
+# IDE
+.idea/
+
+# Test files
 *.bin
-*.dat
-tty-snd-*
-ansatz
-peak_dbg_text_*
+*.wav
+*.aiff

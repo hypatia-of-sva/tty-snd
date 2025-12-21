@@ -13,6 +13,7 @@ void alinfo(void) {
 }
 
 int main(int argc, char** argv) {
+    SET_BINARY_MODE(stdout);
     aladLoadAL();
 
     if(argc < 3) {
@@ -86,7 +87,6 @@ int main(int argc, char** argv) {
             int currently_recorded_samples = 0;
             while(currently_recorded_samples < buffersize) {
                 alcGetIntegerv(capture, ALC_CAPTURE_SAMPLES, sizeof(int), &currently_recorded_samples);
-                fprintf(stderr,"size: %i\n", currently_recorded_samples);
             }
 
 
@@ -114,6 +114,7 @@ int main(int argc, char** argv) {
 
         //Raw output for debug, courtesy of @Llamato on github
         if(argc > 3 && strcmp(argv[3], "raw") == 0) {
+            SET_BINARY_MODE(stdout);
             //Write raw pcm directly to stdout
             fwrite(buf, sizeof(int16_t), buffersize, stdout);
             fprintf(stderr, "%s\n", "writing raw to stdout");

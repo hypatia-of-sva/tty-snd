@@ -1,6 +1,7 @@
 #include "common.h"
 
 int main(int argc, char** argv) {
+    SET_BINARY_MODE(stdin);
     simple_wav_t float_form = read_simple_wav(stdin);
 
 

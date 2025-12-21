@@ -1,33 +1,136 @@
 # tty-snd
-tty-snd (terminal sound, or \[t​ɪti s​a​ʊnd\]) is a modular system for creating, modifying and displaying audio streams in standard input/output on the terminal
 
-Current modules:
+**tty-snd** (terminal sound, or \[tɪti saʊnd\]) is a modular system for creating, modifying and displaying audio streams using standard input/output pipes.
 
-name | description | arguments
---- | --- | ---
-tty-snd-wav | loads a wave file channel stream as complex floats | filename channel-nr
-tty-snd-fft | transforms a stream into its Fourier-transform | reduction-power-of-two index \[-w window-param\]
-tty-snd-graph | displays a stream in a raylib-graph-window | \[none\]
-tty-snd-peaks | finds the peaks in a stream and displays as if they were frequency spikes (formants) | \[none\]
-tty-mic-src | records audio from a microphone as complex floats to stdout | microphone-id recording-time
+## Modules
 
-## How to run tty-snd on your maschine
-First, get a current copy of the source code. The source code can be found on Github under https://github.com/hypatia-of-sva/tty-snd where you are most likely reading this right now.
-To get a copy assuming you have git installed, navigate to a folder you would like your copy of the project to be stored in. Then run `$ git clone https://github.com/hypatia-of-sva/tty-snd`. If you do not have git installed please use githubs "code->Download Zip" function to download a zip file instead. Then extract the zip into a folder of your choosing. 
-After this you should have a folder named TTY-SND. In this folder you will find the contents of the git repository. More specifically it's master branch.
+| Module | Description | Arguments |
+|--------|-------------|-----------|
+| `tty-snd-mic-src` | Records audio from microphone | `device-id` `duration-seconds` |
+| `tty-snd-graph` | Displays audio stream as graph | *(none)* |
+| `tty-snd-fft` | Applies Fourier transform | `reduction-power` `index` `[-w window]` |
+| `tty-snd-wav` | Loads WAV file as stream | `filename` `channel-nr` |
+| `tty-snd-peaks` | Finds frequency peaks (formants) | `nr_of_steps` `min_cents_difference` |
+| `tty-snd-bfilter` | Box filter (bandpass) | `min_freq` `max_freq` |
+| `tty-snd-ifft` | Inverse Fourier transform | `reduction-power` `index` |
 
-The project itself depends upon raylib. A C/C++ library for drawing 2d graphics. Please make sure your system has raylib installed.
-Additionally in order to easily build the project on your system using the build system management tool make is recommended. Make will be required on your system for the rest of this guide to work. 
+---
 
-After ensuring all dependencies are meet, navigate to the TTY-SND folder from github. If make is correctly installed on your system you should be able to compile the project by simply running `make`
-Make now executes a bunch of gcc commands. One for each module of the project. 
+## Installation
 
-Now you should be able to run the modules. To verify that the project compilled correctly, we recommend you run `$ ./tty-snd-mic-src`
-you should now see a list of microphones connected to the system. On @Llamatos system for example the command returns:
+### Windows (CMD only)
 
-    Available mics:
-    0: QUAD-CAPTURE 1-2 (1L+2R)
-    default: QUAD-CAPTURE 1-2 (1L+2R)
+> ⚠️ **PowerShell corrupts binary pipes.** Use Command Prompt (`cmd.exe`) for all commands.
 
-Note the numbers in front of each interface aswell as the default: in front of one of them.
-The microphone you would like to use must be specified ny passing its number as a console parameter to tty-snd-mic-src, in addition to the microphone to use the length of the desired recording in seconds must be specified. For example `$ ./tty-snd-src 0 10.5` will record sound from microphone 0 for 10.5 seconds and output it to the standard output stream. By default the standard output stream is displayed in your console window. That does not help us much here as a text based terminal console can not play sound. To actually listen to the output you need to give it to use a program that can playback raw pcm. The easiest way to do so is to pipe it into a file for later use. To pipe the output into a file use the pipe operator `>` like so `$ ./tty-snd-src 0 10.5 > soundtest.wav`. The wav file can now be played back with a program of your choice. The author of this redme recommends using ffplay from the ffmpeg converter / transcoder package. An example playback command might look like so `$ ffplay soundtest.wav`. If you hear a bunch of noise that is nothing like what you recorded, **do not panic**. The program is working correctly and the reason for you hearing a bunch of noise is an internal format transformation the projects input tools perform so the processing tools can work with the data from your mic.
+**Prerequisites:**
+- CMake: `winget install Kitware.CMake`
+- Visual Studio with "Desktop C++ workload"
+- Git: `winget install Git.Git`
+
+**Build:**
+```cmd
+git clone <repository-url>
+cd tty-snd
+cmake -S . -B build/win
+cmake --build build/win -j %NUMBER_OF_PROCESSORS%
+
+:: Copy required DLL (one-time)
+copy build\win\_deps\openal_soft-build\Debug\OpenAL32.dll build\win\Debug\
+```
+
+### Linux
+
+**Prerequisites:**
+```bash
+# Debian/Ubuntu
+sudo apt install git cmake build-essential libopenal-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl1-mesa-dev
+```
+
+**Build:**
+```bash
+git clone <repository-url>
+cd tty-snd
+cmake -S . -B build/linux
+cmake --build build/linux -j $(nproc)
+```
+
+---
+
+## Quickstart
+
+### Windows
+
+```cmd
+:: List available microphones
+build\win\Debug\tty-snd-mic-src.exe
+
+:: Record 5 seconds from mic #0 and display graph
+build\win\Debug\tty-snd-mic-src.exe 0 5.0 | build\win\Debug\tty-snd-graph.exe
+
+:: Apply FFT then visualize
+build\win\Debug\tty-snd-mic-src.exe 0 5.0 | build\win\Debug\tty-snd-fft.exe 0 0 | build\win\Debug\tty-snd-graph.exe
+```
+
+### Linux
+
+```bash
+# List available microphones
+./build/linux/tty-snd-mic-src
+
+# Record 5 seconds from mic #0 and display graph
+./build/linux/tty-snd-mic-src 0 5.0 | ./build/linux/tty-snd-graph
+```
+
+### WSL Testing (No Mic Access)
+
+If you're on WSL and the microphone doesn't work, generate audio on Windows first:
+
+```cmd
+:: On Windows CMD - generate test audio file
+build\win\Debug\tty-snd-mic-src.exe 0 3.0 > test_audio.aiff
+```
+
+Then test Linux tools with that file:
+
+```bash
+# On WSL/Linux - test processing pipeline
+./build/linux/tty-snd-fft 0 0 < test_audio.aiff > fft_out.aiff
+./build/linux/tty-snd-bfilter 100 2000 < fft_out.aiff > filtered.aiff
+
+# Note: Graph display has a known rendering issue on Linux (see ROADMAP.md)
+```
+
+---
+
+## How It Works
+
+The tools use Unix-style pipes to chain audio processing:
+
+```
+[mic-src] → raw audio → [fft] → frequency data → [peaks] → formants
+                                      ↓
+                                  [graph] → visualization
+```
+
+All tools communicate using a custom AIFF-based binary format with 32-bit floats.
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| `OpenAL32.dll not found` | Copy DLL: `copy build\win\_deps\openal_soft-build\Debug\OpenAL32.dll build\win\Debug\` |
+| Assertion error on Windows | Use `cmd.exe` instead of PowerShell |
+| No microphones listed | Check audio device drivers and permissions |
+| Linux graph shows wrong data | Known issue - see [ROADMAP.md](ROADMAP.md) |
+
+---
+
+## Known Issues
+
+See [ROADMAP.md](ROADMAP.md) for known bugs and planned improvements.
+
+## License
+
+See [LICENSE](LICENSE) file.
