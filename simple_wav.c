@@ -5,7 +5,7 @@
 uint8_t afgetc(FILE* fd) {
     int c = fgetc(fd);
     assert(c != EOF);
-    return c;
+    return (uint8_t)c;
 }
 /* asserted fputc */
 void afputc(uint8_t c, FILE* fd) {
@@ -171,6 +171,7 @@ void parse_peak_structs(char* data, size_t len, peak_t** peaks_out, size_t* nr_p
 
 
 void write_simple_wav(FILE* fp, simple_wav_t data) {
+    if (fp == stdout) SET_BINARY_MODE(stdout);
     char* appdata = NULL;
     if(data.nr_peaks == 0 || data.peaks == NULL) {
         appdata = appdata_basic;
@@ -178,7 +179,6 @@ void write_simple_wav(FILE* fp, simple_wav_t data) {
         int struct_bufsize = 0;
         char* struct_buf = format_peak_structs(data.peaks, data.nr_peaks, &struct_bufsize);
         size_t allocsize = strlen(appdata_peaks_intro) + struct_bufsize;
-        fprintf(stderr, "alloc size appdata = %zu", allocsize);
         appdata = calloc(allocsize, 1); /* struct_bufsize already includes NUL */
         memmove(appdata, appdata_peaks_intro, strlen(appdata_peaks_intro));
         memmove(&appdata[strlen(appdata_peaks_intro)], struct_buf, struct_bufsize);
@@ -226,11 +226,10 @@ void write_simple_wav(FILE* fp, simple_wav_t data) {
     for(int i = 0; i < data.nr_sample_points; i++) {
         write_f32be(fp, data.samples[i]);
     }
-
-    fprintf(stderr, "out nr = %zu, blk = %zu\n", data.nr_sample_points, ssnd_block_size);
 }
 
 simple_wav_t read_simple_wav(FILE* fp) {
+    if (fp == stdin) SET_BINARY_MODE(stdin);
     simple_wav_t ret = {0};
     int32_t size_to_read;
 
@@ -240,17 +239,16 @@ simple_wav_t read_simple_wav(FILE* fp) {
     check_input(fp, "AIFC");                        size_to_read -= 4;
     check_input(fp, "FVER");                        size_to_read -= 4;
     assert(read_i32be(fp) == 4);                    size_to_read -= 4;
-    assert(afgetc(fp) == (unsigned char) 0xA2);              size_to_read -= 1;
-    assert(afgetc(fp) == (unsigned char) 0x80);              size_to_read -= 1;
-    assert(afgetc(fp) == (unsigned char) 0x51);              size_to_read -= 1;
-    assert(afgetc(fp) == (unsigned char) 0x40);              size_to_read -= 1;
+    assert(afgetc(fp) == (unsigned char) 0xA2);     size_to_read -= 1;
+    assert(afgetc(fp) == (unsigned char) 0x80);     size_to_read -= 1;
+    assert(afgetc(fp) == (unsigned char) 0x51);     size_to_read -= 1;
+    assert(afgetc(fp) == (unsigned char) 0x40);     size_to_read -= 1;
     check_input(fp, "COMM");                        size_to_read -= 4;
     assert(read_i32be(fp) == 24);                   size_to_read -= 4;
     assert(read_i16be(fp) == 1);                    size_to_read -= 2;
     ret.nr_sample_points = read_i32be(fp);          size_to_read -= 4;
 
     size_t expected_size = sizeof(float)*ret.nr_sample_points+8;
-    fprintf(stderr, "in nr = %zu, blk = %zu\n", ret.nr_sample_points, expected_size);
 
     assert(read_i16be(fp) == 32);                   size_to_read -= 2;
     char extended[10];
@@ -270,9 +268,8 @@ simple_wav_t read_simple_wav(FILE* fp) {
     fread(appdata_buf, 1, appdata_size, fp);         size_to_read -= appdata_size;
 
     if(appdata_size == strlen(appdata_basic)) {
-        assert(strcmp(appdata_basic, appdata_buf) == 0);
+        assert(strncmp(appdata_basic, appdata_buf, appdata_size) == 0);
     } else {
-        fprintf(stderr, "appdata_size=%i\n", appdata_size);
         assert(appdata_size > strlen(appdata_peaks_intro));
         assert(strncmp(appdata_buf, appdata_peaks_intro, strlen(appdata_peaks_intro)) == 0);
         parse_peak_structs(&appdata_buf[strlen(appdata_peaks_intro)], appdata_size-strlen(appdata_peaks_intro), &ret.peaks, &ret.nr_peaks);
