@@ -1,11 +1,16 @@
-#!/bin/bash
+#!/bin/sh
 
 for NAME in *.wav
 do
 
     echo "round for $NAME"
     
-    echo "processing $NAME" >> log.txt
+    
+    FILENAME=${NAME%.*}".txt"
+    
+    
+    if ! grep -q "F0" "$FILENAME" ; then
+    
 
 echo """
 Read from file: \"$NAME\"
@@ -15,9 +20,10 @@ selectObject: \"Pitch ${NAME%.*}\"
 Get mean: 0, 0, \"Hertz\"
 """ > temp.praat
 
+
     
-    echo -n "F0(Hz) " >> log.txt
-    praat --run temp.praat >> log.txt
+    echo -n "F0(Hz) " >> $FILENAME
+    praat --run temp.praat >> $FILENAME
     rm temp.praat
 
 
@@ -34,47 +40,44 @@ List: \"yes\", \"no\", 3, \"no\", 2, \"no\", 2, \"yes\"
     rm temp.praat
     
     
+    echo -n "F1(Hz) " >> $FILENAME
+    cat temp.txt | tail --lines=+2 | less | awk -v N=2 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> $FILENAME
     
-    echo -n "F1(Hz) " >> log.txt
-    cat temp.txt | tail --lines=+2 | less | awk -v N=2 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> log.txt
+    echo -n "B1(Hz) " >> $FILENAME
+    cat temp.txt | tail --lines=+2 | less | awk -v N=3 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> $FILENAME
     
-    echo -n "B1(Hz) " >> log.txt
-    cat temp.txt | tail --lines=+2 | less | awk -v N=3 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> log.txt
+    echo -n "F2(Hz) " >> $FILENAME
+    cat temp.txt | tail --lines=+2 | less | awk -v N=4 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> $FILENAME
     
-    echo -n "F2(Hz) " >> log.txt
-    cat temp.txt | tail --lines=+2 | less | awk -v N=4 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> log.txt
+    echo -n "B2(Hz) " >> $FILENAME
+    cat temp.txt | tail --lines=+2 | less | awk -v N=5 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> $FILENAME
     
-    echo -n "B2(Hz) " >> log.txt
-    cat temp.txt | tail --lines=+2 | less | awk -v N=5 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> log.txt
+    echo -n "F3(Hz) " >> $FILENAME
+    cat temp.txt | tail --lines=+2 | less | awk -v N=6 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> $FILENAME
     
-    echo -n "F3(Hz) " >> log.txt
-    cat temp.txt | tail --lines=+2 | less | awk -v N=6 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> log.txt
-    
-    echo -n "B3(Hz) " >> log.txt
-    cat temp.txt | tail --lines=+2 | less | awk -v N=7 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> log.txt
-    
-    
-    echo -n "F4(Hz) " >> log.txt
-    cat temp.txt | tail --lines=+2 | less | awk -v N=8 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> log.txt
-    
-    echo -n "B4(Hz) " >> log.txt
-    cat temp.txt | tail --lines=+2 | less | awk -v N=9 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> log.txt
+    echo -n "B3(Hz) " >> $FILENAME
+    cat temp.txt | tail --lines=+2 | less | awk -v N=7 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> $FILENAME
     
     
-    echo -n "F5(Hz) " >> log.txt
-    cat temp.txt | tail --lines=+2 | less | awk -v N=10 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> log.txt
+    echo -n "F4(Hz) " >> $FILENAME
+    cat temp.txt | tail --lines=+2 | less | awk -v N=8 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> $FILENAME
     
-    echo -n "B5(Hz) " >> log.txt
-    cat temp.txt | tail --lines=+2 | less | awk -v N=11 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> log.txt
+    echo -n "B4(Hz) " >> $FILENAME
+    cat temp.txt | tail --lines=+2 | less | awk -v N=9 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> $FILENAME
     
     
-    echo "" >> log.txt
-    echo "" >> log.txt
-    echo "" >> log.txt
+    echo -n "F5(Hz) " >> $FILENAME
+    cat temp.txt | tail --lines=+2 | less | awk -v N=10 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> $FILENAME
+    
+    echo -n "B5(Hz) " >> $FILENAME
+    cat temp.txt | tail --lines=+2 | less | awk -v N=11 '{ sum += $N } END { if (NR > 0) print sum / NR }' >> $FILENAME
+    
+    
     
     
     rm temp.txt
     
+fi
     
 done
     
