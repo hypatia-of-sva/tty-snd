@@ -1,47 +1,45 @@
 #include "common.h"
 
-void destroy_waveform(waveform_t* wave) {
-	if(wave[0].amplitude_data != NULL)
-		free(wave[0].amplitude_data);
-}
-
-
-
-
-
 /*
 	Reads a 16 bit PCM Wave file bytewise; kills the program if it doesn't work (gory!)
 	For documentation see the specs and overview at
 	https://www.mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
 */
-int read_int_wav_file(FILE* fp, int chosen_channel, waveform_t* out_waveform) {
+int read_int_wav_file(char* file_name, int chosen_channel, waveform_t* out_waveform) {
+	FILE* fp = NULL;
 	size_t remaining, block_remaining;
 	char block_label[4];
 	int found_format_block = 0;
 	int available_channels, bytes_per_sample;
-    int i, ch;
+    int i, ch, code = 0;
 	
-	if(fp == NULL) {
-		log_err("File Pointer is a NULL pointer!");
-		return -1;
+	if(file_name == NULL) {
+		log_err("Filename param is a NULL pointer!");
+		code = -1; goto error;
 	}
 	if(out_waveform == NULL) {
-		log_err("Waveform param is a NULL pointer!");
-		return -1;
+		log_err("Out waveform is a NULL pointer!");
+		code = -1; goto error;
+	}
+	
+	fp = fopen(file_name, "rb");
+	if(fp == NULL) {
+		log_err("File was not accessible!");
+		code = -1; goto error;
 	}
 
 	if(fgetc(fp) != 'R' || fgetc(fp) != 'I' || fgetc(fp) != 'F' || fgetc(fp) != 'F') {
 		log_err("invalid file (invalid \"RIFF\" tag)");
-		return -1;
+		code = -1; goto error;
 	}
 	remaining = fgetc(fp)+(fgetc(fp)<<8)+(fgetc(fp)<<16)+(fgetc(fp)<<24);
 	if(filesize(file_name) < remaining+8) {
 		log_err("invalid file (file shorter than described in the header)");
-		return -1;
+		code = -1; goto error;
 	}
 	if(fgetc(fp) != 'W' || fgetc(fp) != 'A' || fgetc(fp) != 'V' || fgetc(fp) != 'E') {
 		log_err("invalid file (invalid \"WAVE\" tag)");
-		return -1;
+		code = -1; goto error;
 	}
 	remaining -= 4;
 
@@ -53,7 +51,7 @@ int read_int_wav_file(FILE* fp, int chosen_channel, waveform_t* out_waveform) {
 		block_remaining = fgetc(fp)+(fgetc(fp)<<8)+(fgetc(fp)<<16)+(fgetc(fp)<<24);
 		if(remaining < block_remaining+8) {
 			log_err("invalid file (block within the file longer than the described file size)");
-			return -1;
+			code = -1; goto error;
 		}
 		remaining -= 8 + block_remaining + (block_remaining%2);
 		switch(block_label[0]) {
@@ -68,27 +66,27 @@ int read_int_wav_file(FILE* fp, int chosen_channel, waveform_t* out_waveform) {
 
 				if(block_remaining != 16) {
 					log_err("invalid format (format block size greater than expected for PCM)");
-					return -1;
+					code = -1; goto error;
 				}
 				if(fgetc(fp) != 1 || fgetc(fp) != 0) {
 					log_err("invalid format (format tag different from 0x0001 (PCM))");
-					return -1;
+					code = -1; goto error;
 				}
 
 				available_channels = fgetc(fp) + (fgetc(fp)<<8);
 				if(chosen_channel > available_channels) {
 					log_err("invalid format (not enough channels available)");
-					return -1;
+					code = -1; goto error;
 				}
 
-				out_waveform.samples_per_second = fgetc(fp)+(fgetc(fp)<<8)+(fgetc(fp)<<16)+(fgetc(fp)<<24);
+				out_waveform[0].samples_per_second = fgetc(fp)+(fgetc(fp)<<8)+(fgetc(fp)<<16)+(fgetc(fp)<<24);
 
 				(void) (fgetc(fp)+(fgetc(fp)<<8)+(fgetc(fp)<<16)+(fgetc(fp)<<24));
 
 				bytes_per_sample = (fgetc(fp)+(fgetc(fp)<<8))/available_channels;
 				if (bytes_per_sample != 2) {
 					log_err("invalid format (bits per sample not 16)");
-					return -1;
+					code = -1; goto error;
 				}
 
 				(void) (fgetc(fp)+(fgetc(fp)<<8));
@@ -106,15 +104,15 @@ int read_int_wav_file(FILE* fp, int chosen_channel, waveform_t* out_waveform) {
 
 				if(!found_format_block) {
 					log_err("invalid file (no format block found before data block)");
-					return -1;
+					code = -1; goto error;
 				}
 
-				out_waveform.data_length = block_remaining/(2*available_channels);
-				out_waveform.amplitude_data = malloc(sizeof(int16_t)*wave.data_length);
-				for(i = 0; i < wave.data_length; i++) {
+				out_waveform[0].data_length = block_remaining/(2*available_channels);
+				out_waveform[0].amplitude_data = malloc(sizeof(int16_t)*out_waveform[0].data_length);
+				for(i = 0; i < out_waveform[0].data_length; i++) {
 					for(ch = 0; ch < available_channels; ch++) {
 						if (ch == chosen_channel) {
-							out_waveform.amplitude_data[i] = (fgetc(fp)+(fgetc(fp)<<8));
+							out_waveform[0].amplitude_data[i] = (fgetc(fp)+(fgetc(fp)<<8));
 						} else {
 							(void) (fgetc(fp)+(fgetc(fp)<<8));
 						}
@@ -133,9 +131,11 @@ int read_int_wav_file(FILE* fp, int chosen_channel, waveform_t* out_waveform) {
 		}
 	}
 	
-	return 0;
+error:
+	if(fp != NULL)
+		fclose(fp);
+	return code;
 }
-
 
 int write_int_wav_file(FILE* fp, waveform_t data) {
 	if(fp == NULL) {
@@ -216,25 +216,17 @@ int write_int_wav_file(FILE* fp, waveform_t data) {
 	return 0;
 }
 
-
-float duration(waveform_t form) {
-    return (((float)form.data_length)/((float)form.samples_per_second));
-}
-
-
-
-
 int int_wave_to_floating(waveform_t in, floating_waveform_t* out) {
 	if(out == NULL) {
 		log_err("Floating Waveform outptr is a NULL pointer!");
 		return -1;
 	}
 	
-	out.sample_frequency_Hz = (float) in.samples_per_second;
-	out.data_length = in.data_length;
-	out.amplitude_data = malloc(out.data_length*sizeof(double));
-	for(int i = 0; i < out.data_length; i++) {
-		out.amplitude_data[i] = ((double) in.amplitude_data[i]) / (double) (1 << 15);
+	out[0].sample_frequency_Hz = (float) in.samples_per_second;
+	out[0].data_length = in.data_length;
+	out[0].amplitude_data = malloc(out[0].data_length*sizeof(double));
+	for(int i = 0; i < out[0].data_length; i++) {
+		out[0].amplitude_data[i] = ((double) in.amplitude_data[i]) / (double) (1 << 15);
 	}
 	return 0;
 }
@@ -244,25 +236,23 @@ int floating_wave_to_int(floating_waveform_t in, waveform_t* out) {
 		return -1;
 	}
 	
-	out.samples_per_second = (int) round(in.sample_frequency_Hz);
-	out.data_length = in.data_length;
-	out.amplitude_data = malloc(out.data_length*sizeof(int16_t));
-	for(int i = 0; i < out.data_length; i++) {
-		out.amplitude_data[i] = (int16_t) round(in.amplitude_data[i] * (1 << 15));
+	out[0].samples_per_second = (int) round(in.sample_frequency_Hz);
+	out[0].data_length = in.data_length;
+	out[0].amplitude_data = malloc(out[0].data_length*sizeof(int16_t));
+	for(int i = 0; i < out[0].data_length; i++) {
+		out[0].amplitude_data[i] = (int16_t) round(in.amplitude_data[i] * (1 << 15));
 	}
 	return 0;
 }
 
-
 static int checked_fread(void* ptr, size_t a, size_t b, FILE* fp) {
 	size_t res = fread(ptr, a, b, fp);
-	return (res != a * b);
+	return (res != b);
 }
 static int checked_fwrite(void* ptr, size_t a, size_t b, FILE* fp) {
 	size_t res = fwrite(ptr, a, b, fp);
-	return (res != a * b);
+	return (res != b);
 }
-
 int read_floating_wave(floating_waveform_t* wave, FILE* fp) {
 	if(wave == NULL) {
 		log_err("Floating Waveform is a NULL pointer!");
@@ -279,29 +269,42 @@ int read_floating_wave(floating_waveform_t* wave, FILE* fp) {
 	wave[0].amplitude_data = malloc(wave[0].data_length*sizeof(double));
 	if(wave[0].amplitude_data == NULL) return -1;
 	
-	if(checked_fread(wave[0].amplitude_data, sizeof(double), wave.data_length, fp)) {
+	if(checked_fread(wave[0].amplitude_data, sizeof(double), wave[0].data_length, fp)) {
 		return -1;
 	}
 	return 0;
 }
-
 int write_floating_wave(floating_waveform_t wave, FILE* fp) {
 	if(wave.amplitude_data == NULL) {
 		log_err("Floating Waveform Amplitude is a NULL pointer!");
 		return -1;
 	}
 	
-	if(checked_fwrite(&wave.sample_frequency_Hz, sizeof(float), 1, fp)) {
-		return -1;
+	if(checked_fwrite(&(wave.sample_frequency_Hz), sizeof(float), 1, fp)) {
+		return -2;
 	}
 	if(checked_fwrite(&wave.data_length, sizeof(size_t), 1, fp)) {
-		return -1;
+		return -3;
 	}
 	if(checked_fwrite(wave.amplitude_data, sizeof(double), wave.data_length, fp)) {
-		return -1;
+		return -4;
 	}
 	return 0;
 }
 
+float duration_floating_wave(floating_waveform_t form) {
+    return (((float)form.data_length)/(form.sample_frequency_Hz));
+}
+float duration_int_wave(waveform_t form) {
+    return (((float)form.data_length)/((float)form.samples_per_second));
+}
+void destroy_int_wave(waveform_t* wave) {
+	if(wave[0].amplitude_data != NULL)
+		free(wave[0].amplitude_data);
+}
+void destroy_floating_wave(floating_waveform_t* wave) {
+	if(wave[0].amplitude_data != NULL)
+		free(wave[0].amplitude_data);
+}
 
 

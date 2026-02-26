@@ -71,7 +71,9 @@
 
 /* util.c */
 void log_err(char* msg);
-
+size_t filesize(const char* path);
+bool is_power_of_2(uint32_t x);
+uint64_t truncate_power_of_2(uint64_t x);
 
 
 
@@ -82,34 +84,36 @@ typedef struct {
 	size_t data_length;
 	int16_t* amplitude_data;
 } waveform_t;
-/*
-	Reads a 16 bit PCM Wave file bytewise; returns != 0 when it doesn't work
-	For documentation see the specs and overview at
-	https://www.mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
-*/
-
-int read_int_wav_file(FILE* fp, int chosen_channel, waveform_t* out_waveform) 
-int write_int_wav_file(FILE* fp, waveform_t data)
-
-
-int read_amplitude_data(char* file_name, int chosen_channel, waveform_t* out_waveform);
-void destroy_waveform(waveform_t* wave);
-
-int write_amplitude_data(char* file_name, waveform_t data);
-float duration(waveform_t form);
-
-
-
 typedef struct {
 	float sample_frequency_Hz;
 	size_t data_length;
 	double* amplitude_data;
 } floating_waveform_t;
+/*
+	Reads a 16 bit PCM Wave file bytewise; returns != 0 when it doesn't work
+	For documentation see the specs and overview at
+	https://www.mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
+*/
+int read_int_wav_file(char* file_name, int chosen_channel, waveform_t* out_waveform);
 
+int write_int_wav_file(FILE* fp, waveform_t data);
 int int_wave_to_floating(waveform_t in, floating_waveform_t* out);
 int floating_wave_to_int(floating_waveform_t in, waveform_t* out);
 int read_floating_wave(floating_waveform_t* wave, FILE* fp);
 int write_floating_wave(floating_waveform_t wave, FILE* fp);
+float duration_int_wave(waveform_t form);
+float duration_floating_wave(floating_waveform_t form);
+void destroy_int_wave(waveform_t* wave);
+void destroy_floating_wave(floating_waveform_t* wave);
+
+
+
+
+/* returns a pointer to be freed with free() (i.e. gives ownership)
+   the array is made up of complex numbers as in pairs, with real first and then imaginary
+   this means that the full frequency part is the sum of squares of both */
+double* fft_power_of_two(double* data, size_t len);
+double* ifft_power_of_two(double* data, size_t len);
 
 
 
@@ -120,8 +124,9 @@ int write_floating_wave(floating_waveform_t wave, FILE* fp);
 
 
 
+/*
 
-/* gauss.c */
+ gauss.c 
 
 
 typedef struct matrix_t {
@@ -142,18 +147,18 @@ matrix_t invert_matrix(matrix_t mat_input);
 matrix_t matrix_multiply(matrix_t a, matrix_t b);
 
 
-/* bmp.c */
+ bmp.c 
 void write_bitmap_data(char* file_name, uint8_t* red_data, uint8_t* green_data, uint8_t* blue_data, uint8_t* alpha_data, size_t len, int width, int height, float DPI);
 
 
 
 
-/* lpc.c */
+ lpc.c
 
 float lpc_pole_function(matrix_t lpc_vector, float x);
 matrix_t lpc_float(double* data, size_t len, int nr_formants);
 
-/* formant.c */
+formant.c 
 
 typedef struct formant_params_t {
     float filter_strength;
@@ -168,20 +173,20 @@ void init_formant_params(void);
 int find_formants(waveform_t form, int nr_formants, matrix_t* formant_values, matrix_t* formant_bandwidths, bool do_extra_division);
 
 
-/* root.c */
+ root.c 
 void poly_complex_solve(const double *polynomial_coefficients, size_t nr_of_terms, double* polynomial_roots, double* working_matrix);
 
-/* fft.c */
-/* returns a pointer to be freed with free() (i.e. gives ownership)
+ fft.c 
+ returns a pointer to be freed with free() (i.e. gives ownership)
    the array is made up of complex numbers as in pairs, with real first and then imaginary
-   this means that the full frequency part is the sum of squares of both */
+   this means that the full frequency part is the sum of squares of both 
 float* fft_power_of_two(float* data, size_t len);
 float* ifft_power_of_two(float* data, size_t len);
 
 
 
 
-/* cutoff_intervals.c */
+ cutoff_intervals.c 
 
 typedef struct interval_t {
     size_t lower_index;
@@ -202,7 +207,7 @@ void get_sorted_iteratively_merged_interval_list_by_cutoff_step(float* data, siz
 
 
 
-/* util.c */
+ util.c 
 void write_dbl_array(double* data, size_t len, const char* filename);
 void write_float_array(float* data, size_t len, const char* filename);
 void quick_sort_float(float* array, size_t len);
@@ -251,7 +256,7 @@ typedef struct formant_t {
 } formant_t;
 
 
-/* direct_peak.c */
+ direct_peak.c
 int* calculate_peaks(float* data, size_t len, const char* filename);
 int* calculate_peaks_dbl(double* data, size_t len, const char* filename);
 
@@ -263,17 +268,7 @@ void sleep_us(uint32_t us);
 
 
 
-
-
-
-
-
-
-
-
-
-
-/* simple_wav.c */
+simple_wav.c 
 
 typedef struct simple_wav_t {
     float frequency_in_hz;
@@ -289,27 +284,27 @@ void write_simple_wav(FILE* fp, simple_wav_t data);
 
 
 
-/* f80.c */
+ f80.c 
 
 void convert_to_extended_float_be(double val, char* outptr);
 double convert_from_extended_float_be(char* inptr);
 
 
-/* lpc.c */
+ lpc.c 
 float* lpc_coefficients_rosa(float* data, size_t len, int order);
 double* lpc_coefficients_rosa_double(double* data, size_t len, int order);
 
-/* marple_alg_2.c */
-int ar_params (double *x_in /* data */,
-     int n /* num_values */,
-     int mmax /* nr_formants */,
-     float tol1, float tol2 /* tolerances */,
-     int* out_m /* out_calculated */,
-     double *a_in /* out_ar_params, has to have nr_formants space */,
-     float *out_e /* out_pred_error_energy_order_m */,
-     float *out_e0 /* out_twice_total_energy */
+ marple_alg_2.c 
+int ar_params (double *x_in  		data ,
+     int n 		 num_values ,
+     int mmax 		 nr_formants ,
+     float tol1, float tol2 		 tolerances ,
+     int* out_m 		 out_calculated ,
+     double *a_in 		 out_ar_params, has to have nr_formants space ,
+     float *out_e 		 out_pred_error_energy_order_m ,
+     float *out_e0 		 out_twice_total_energy 
      );
-/* informant_algs.c */
+ informant_algs.c 
 
 double* autocorr_solve(const double *data, int length, int lpcOrder, double *pGain, size_t* out_nr_formants);
 double* Covar_solve(const double *data, int length, int lpcOrder, double *pGain, size_t* out_nr_formants);
@@ -318,10 +313,15 @@ double* Burg_solve(const double *x, int length, int lpcOrder, double *pGain, siz
 
 
 
-/* r_formant_code */
+ r_formant_code 
 void r_find_formants(double* sound, size_t len, double frequency, int order, int maxbw, int minformant, double* formants, double* bws, bool* is_selected);
 
-/* praat_burg_lpc */
+ praat_burg_lpc 
 double VECburg(double* out_coeffs, size_t nr_coeffs, const double  * samples, size_t nr_samples);
+
+
+
+*/
+
 
 #endif
