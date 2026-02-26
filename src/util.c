@@ -22,4 +22,11 @@ size_t filesize(const char* path) {
 
 
 
+bool is_power_of_2(uint32_t x) {
+    return x > 0 && !(x & (x-1));
+}
+uint64_t truncate_power_of_2(uint64_t x) {
+	if(is_power_of_2(x) || x == 0) return x;
+	return (1U << ilogb((double)x));
+}
 
