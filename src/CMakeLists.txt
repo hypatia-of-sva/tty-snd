@@ -9,7 +9,7 @@ add_compile_options(-g -Wall -Wextra)
 #add_compile_definitions(HAS_RAYLIB)
 
 # --- Dependencies ---
-#include(FetchContent)
+include(FetchContent)
 
 # Fetch Raylib
 #set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
@@ -40,7 +40,6 @@ set(COMMON_SOURCES
 include_directories("../deps-include")
 
 find_package(GSL REQUIRED)  
-#target_link_libraries(Unitsv1 GSL::gsl GSL::gslcblas)
 
 # --- Targets ---
 
@@ -52,6 +51,8 @@ add_executable(tty-snd-reduce_imag reduce_imag_main.c ${COMMON_SOURCES})
 add_executable(tty-snd-reduce_cabs reduce_cabs_main.c ${COMMON_SOURCES})
 add_executable(tty-snd-fft fft.c fft_main.c ${COMMON_SOURCES})
 add_executable(tty-snd-ifft fft.c ifft_main.c ${COMMON_SOURCES})
+add_executable(tty-snd-formant praat_burg_lpc.c formant_main.c ${COMMON_SOURCES})
+target_link_libraries(tty-snd-formant GSL::gsl GSL::gslcblas)
 
 
 

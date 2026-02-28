@@ -1,0 +1,1 @@
+/usr/bin/cc -Wl,--dependency-file=CMakeFiles/tty-snd-reduce_imag.dir/link.d "CMakeFiles/tty-snd-reduce_imag.dir/reduce_imag_main.c.o" "CMakeFiles/tty-snd-reduce_imag.dir/util.c.o" "CMakeFiles/tty-snd-reduce_imag.dir/alad.c.o" "CMakeFiles/tty-snd-reduce_imag.dir/wav.c.o" -o tty-snd-reduce_imag  -lm

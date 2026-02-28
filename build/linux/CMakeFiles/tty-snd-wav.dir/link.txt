@@ -1,0 +1,1 @@
+/usr/bin/cc -Wl,--dependency-file=CMakeFiles/tty-snd-wav.dir/link.d "CMakeFiles/tty-snd-wav.dir/wav_main.c.o" "CMakeFiles/tty-snd-wav.dir/util.c.o" "CMakeFiles/tty-snd-wav.dir/alad.c.o" "CMakeFiles/tty-snd-wav.dir/wav.c.o" -o tty-snd-wav  -lm

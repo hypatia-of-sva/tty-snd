@@ -1,0 +1,1 @@
+/usr/bin/cc -Wl,--dependency-file=CMakeFiles/tty-snd-complexify.dir/link.d "CMakeFiles/tty-snd-complexify.dir/complexify_main.c.o" "CMakeFiles/tty-snd-complexify.dir/util.c.o" "CMakeFiles/tty-snd-complexify.dir/alad.c.o" "CMakeFiles/tty-snd-complexify.dir/wav.c.o" -o tty-snd-complexify  -lm

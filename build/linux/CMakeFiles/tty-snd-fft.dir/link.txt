@@ -1,0 +1,1 @@
+/usr/bin/cc -Wl,--dependency-file=CMakeFiles/tty-snd-fft.dir/link.d "CMakeFiles/tty-snd-fft.dir/fft.c.o" "CMakeFiles/tty-snd-fft.dir/fft_main.c.o" "CMakeFiles/tty-snd-fft.dir/util.c.o" "CMakeFiles/tty-snd-fft.dir/alad.c.o" "CMakeFiles/tty-snd-fft.dir/wav.c.o" -o tty-snd-fft  -lm

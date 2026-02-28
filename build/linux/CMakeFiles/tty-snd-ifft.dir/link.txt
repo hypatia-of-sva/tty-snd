@@ -1,0 +1,1 @@
+/usr/bin/cc -Wl,--dependency-file=CMakeFiles/tty-snd-ifft.dir/link.d "CMakeFiles/tty-snd-ifft.dir/fft.c.o" "CMakeFiles/tty-snd-ifft.dir/ifft_main.c.o" "CMakeFiles/tty-snd-ifft.dir/util.c.o" "CMakeFiles/tty-snd-ifft.dir/alad.c.o" "CMakeFiles/tty-snd-ifft.dir/wav.c.o" -o tty-snd-ifft  -lm

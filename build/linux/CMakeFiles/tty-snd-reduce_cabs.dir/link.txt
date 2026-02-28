@@ -1,0 +1,1 @@
+/usr/bin/cc -Wl,--dependency-file=CMakeFiles/tty-snd-reduce_cabs.dir/link.d "CMakeFiles/tty-snd-reduce_cabs.dir/reduce_cabs_main.c.o" "CMakeFiles/tty-snd-reduce_cabs.dir/util.c.o" "CMakeFiles/tty-snd-reduce_cabs.dir/alad.c.o" "CMakeFiles/tty-snd-reduce_cabs.dir/wav.c.o" -o tty-snd-reduce_cabs  -lm

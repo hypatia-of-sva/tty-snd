@@ -118,6 +118,10 @@ double* ifft_power_of_two(double* data, size_t len);
 
 
 
+/* praat_burg_lpc  */
+double VECburg(double* out_coeffs, size_t nr_coeffs, const double  * samples, size_t nr_samples);
+
+
 
 
 
@@ -316,8 +320,6 @@ double* Burg_solve(const double *x, int length, int lpcOrder, double *pGain, siz
  r_formant_code 
 void r_find_formants(double* sound, size_t len, double frequency, int order, int maxbw, int minformant, double* formants, double* bws, bool* is_selected);
 
- praat_burg_lpc 
-double VECburg(double* out_coeffs, size_t nr_coeffs, const double  * samples, size_t nr_samples);
 
 
 

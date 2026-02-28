@@ -1,0 +1,10 @@
+/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles/tty-snd-wav.dir
+/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles/tty-snd-complexify.dir
+/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles/tty-snd-reduce_real.dir
+/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles/tty-snd-reduce_imag.dir
+/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles/tty-snd-reduce_cabs.dir
+/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles/tty-snd-fft.dir
+/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles/tty-snd-ifft.dir
+/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles/tty-snd-formant.dir
+/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles/edit_cache.dir
+/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles/rebuild_cache.dir
