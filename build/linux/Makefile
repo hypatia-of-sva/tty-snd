@@ -130,6 +130,19 @@ tty-snd-wav/fast:
 .PHONY : tty-snd-wav/fast
 
 #=============================================================================
+# Target rules for targets named tty-snd-write_wav
+
+# Build rule for target.
+tty-snd-write_wav: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tty-snd-write_wav
+.PHONY : tty-snd-write_wav
+
+# fast build rule for target.
+tty-snd-write_wav/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/build
+.PHONY : tty-snd-write_wav/fast
+
+#=============================================================================
 # Target rules for targets named tty-snd-complexify
 
 # Build rule for target.
@@ -220,12 +233,26 @@ tty-snd-formant/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/build
 .PHONY : tty-snd-formant/fast
 
+#=============================================================================
+# Target rules for targets named tty-snd-deriv
+
+# Build rule for target.
+tty-snd-deriv: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tty-snd-deriv
+.PHONY : tty-snd-deriv
+
+# fast build rule for target.
+tty-snd-deriv/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/build
+.PHONY : tty-snd-deriv/fast
+
 alad.o: alad.c.o
 .PHONY : alad.o
 
 # target to build an object file
 alad.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/alad.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/alad.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-complexify.dir/build.make CMakeFiles/tty-snd-complexify.dir/alad.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_real.dir/build.make CMakeFiles/tty-snd-reduce_real.dir/alad.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_imag.dir/build.make CMakeFiles/tty-snd-reduce_imag.dir/alad.c.o
@@ -233,6 +260,7 @@ alad.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-fft.dir/build.make CMakeFiles/tty-snd-fft.dir/alad.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-ifft.dir/build.make CMakeFiles/tty-snd-ifft.dir/alad.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/alad.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/alad.c.o
 .PHONY : alad.c.o
 
 alad.i: alad.c.i
@@ -241,6 +269,7 @@ alad.i: alad.c.i
 # target to preprocess a source file
 alad.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/alad.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/alad.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-complexify.dir/build.make CMakeFiles/tty-snd-complexify.dir/alad.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_real.dir/build.make CMakeFiles/tty-snd-reduce_real.dir/alad.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_imag.dir/build.make CMakeFiles/tty-snd-reduce_imag.dir/alad.c.i
@@ -248,6 +277,7 @@ alad.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-fft.dir/build.make CMakeFiles/tty-snd-fft.dir/alad.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-ifft.dir/build.make CMakeFiles/tty-snd-ifft.dir/alad.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/alad.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/alad.c.i
 .PHONY : alad.c.i
 
 alad.s: alad.c.s
@@ -256,6 +286,7 @@ alad.s: alad.c.s
 # target to generate assembly for a file
 alad.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/alad.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/alad.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-complexify.dir/build.make CMakeFiles/tty-snd-complexify.dir/alad.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_real.dir/build.make CMakeFiles/tty-snd-reduce_real.dir/alad.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_imag.dir/build.make CMakeFiles/tty-snd-reduce_imag.dir/alad.c.s
@@ -263,6 +294,7 @@ alad.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-fft.dir/build.make CMakeFiles/tty-snd-fft.dir/alad.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-ifft.dir/build.make CMakeFiles/tty-snd-ifft.dir/alad.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/alad.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/alad.c.s
 .PHONY : alad.c.s
 
 complexify_main.o: complexify_main.c.o
@@ -288,6 +320,30 @@ complexify_main.s: complexify_main.c.s
 complexify_main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-complexify.dir/build.make CMakeFiles/tty-snd-complexify.dir/complexify_main.c.s
 .PHONY : complexify_main.c.s
+
+deriv_main.o: deriv_main.c.o
+.PHONY : deriv_main.o
+
+# target to build an object file
+deriv_main.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/deriv_main.c.o
+.PHONY : deriv_main.c.o
+
+deriv_main.i: deriv_main.c.i
+.PHONY : deriv_main.i
+
+# target to preprocess a source file
+deriv_main.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/deriv_main.c.i
+.PHONY : deriv_main.c.i
+
+deriv_main.s: deriv_main.c.s
+.PHONY : deriv_main.s
+
+# target to generate assembly for a file
+deriv_main.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/deriv_main.c.s
+.PHONY : deriv_main.c.s
 
 fft.o: fft.c.o
 .PHONY : fft.o
@@ -490,6 +546,7 @@ util.o: util.c.o
 # target to build an object file
 util.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/util.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/util.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-complexify.dir/build.make CMakeFiles/tty-snd-complexify.dir/util.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_real.dir/build.make CMakeFiles/tty-snd-reduce_real.dir/util.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_imag.dir/build.make CMakeFiles/tty-snd-reduce_imag.dir/util.c.o
@@ -497,6 +554,7 @@ util.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-fft.dir/build.make CMakeFiles/tty-snd-fft.dir/util.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-ifft.dir/build.make CMakeFiles/tty-snd-ifft.dir/util.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/util.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/util.c.o
 .PHONY : util.c.o
 
 util.i: util.c.i
@@ -505,6 +563,7 @@ util.i: util.c.i
 # target to preprocess a source file
 util.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/util.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/util.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-complexify.dir/build.make CMakeFiles/tty-snd-complexify.dir/util.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_real.dir/build.make CMakeFiles/tty-snd-reduce_real.dir/util.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_imag.dir/build.make CMakeFiles/tty-snd-reduce_imag.dir/util.c.i
@@ -512,6 +571,7 @@ util.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-fft.dir/build.make CMakeFiles/tty-snd-fft.dir/util.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-ifft.dir/build.make CMakeFiles/tty-snd-ifft.dir/util.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/util.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/util.c.i
 .PHONY : util.c.i
 
 util.s: util.c.s
@@ -520,6 +580,7 @@ util.s: util.c.s
 # target to generate assembly for a file
 util.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/util.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/util.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-complexify.dir/build.make CMakeFiles/tty-snd-complexify.dir/util.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_real.dir/build.make CMakeFiles/tty-snd-reduce_real.dir/util.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_imag.dir/build.make CMakeFiles/tty-snd-reduce_imag.dir/util.c.s
@@ -527,6 +588,7 @@ util.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-fft.dir/build.make CMakeFiles/tty-snd-fft.dir/util.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-ifft.dir/build.make CMakeFiles/tty-snd-ifft.dir/util.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/util.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/util.c.s
 .PHONY : util.c.s
 
 wav.o: wav.c.o
@@ -535,6 +597,7 @@ wav.o: wav.c.o
 # target to build an object file
 wav.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/wav.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/wav.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-complexify.dir/build.make CMakeFiles/tty-snd-complexify.dir/wav.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_real.dir/build.make CMakeFiles/tty-snd-reduce_real.dir/wav.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_imag.dir/build.make CMakeFiles/tty-snd-reduce_imag.dir/wav.c.o
@@ -542,6 +605,7 @@ wav.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-fft.dir/build.make CMakeFiles/tty-snd-fft.dir/wav.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-ifft.dir/build.make CMakeFiles/tty-snd-ifft.dir/wav.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/wav.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/wav.c.o
 .PHONY : wav.c.o
 
 wav.i: wav.c.i
@@ -550,6 +614,7 @@ wav.i: wav.c.i
 # target to preprocess a source file
 wav.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/wav.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/wav.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-complexify.dir/build.make CMakeFiles/tty-snd-complexify.dir/wav.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_real.dir/build.make CMakeFiles/tty-snd-reduce_real.dir/wav.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_imag.dir/build.make CMakeFiles/tty-snd-reduce_imag.dir/wav.c.i
@@ -557,6 +622,7 @@ wav.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-fft.dir/build.make CMakeFiles/tty-snd-fft.dir/wav.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-ifft.dir/build.make CMakeFiles/tty-snd-ifft.dir/wav.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/wav.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/wav.c.i
 .PHONY : wav.c.i
 
 wav.s: wav.c.s
@@ -565,6 +631,7 @@ wav.s: wav.c.s
 # target to generate assembly for a file
 wav.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/wav.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/wav.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-complexify.dir/build.make CMakeFiles/tty-snd-complexify.dir/wav.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_real.dir/build.make CMakeFiles/tty-snd-reduce_real.dir/wav.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_imag.dir/build.make CMakeFiles/tty-snd-reduce_imag.dir/wav.c.s
@@ -572,6 +639,7 @@ wav.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-fft.dir/build.make CMakeFiles/tty-snd-fft.dir/wav.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-ifft.dir/build.make CMakeFiles/tty-snd-ifft.dir/wav.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/wav.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/wav.c.s
 .PHONY : wav.c.s
 
 wav_main.o: wav_main.c.o
@@ -598,6 +666,30 @@ wav_main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/wav_main.c.s
 .PHONY : wav_main.c.s
 
+write_wav_main.o: write_wav_main.c.o
+.PHONY : write_wav_main.o
+
+# target to build an object file
+write_wav_main.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/write_wav_main.c.o
+.PHONY : write_wav_main.c.o
+
+write_wav_main.i: write_wav_main.c.i
+.PHONY : write_wav_main.i
+
+# target to preprocess a source file
+write_wav_main.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/write_wav_main.c.i
+.PHONY : write_wav_main.c.i
+
+write_wav_main.s: write_wav_main.c.s
+.PHONY : write_wav_main.s
+
+# target to generate assembly for a file
+write_wav_main.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/write_wav_main.c.s
+.PHONY : write_wav_main.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -607,6 +699,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... tty-snd-complexify"
+	@echo "... tty-snd-deriv"
 	@echo "... tty-snd-fft"
 	@echo "... tty-snd-formant"
 	@echo "... tty-snd-ifft"
@@ -614,12 +707,16 @@ help:
 	@echo "... tty-snd-reduce_imag"
 	@echo "... tty-snd-reduce_real"
 	@echo "... tty-snd-wav"
+	@echo "... tty-snd-write_wav"
 	@echo "... alad.o"
 	@echo "... alad.i"
 	@echo "... alad.s"
 	@echo "... complexify_main.o"
 	@echo "... complexify_main.i"
 	@echo "... complexify_main.s"
+	@echo "... deriv_main.o"
+	@echo "... deriv_main.i"
+	@echo "... deriv_main.s"
 	@echo "... fft.o"
 	@echo "... fft.i"
 	@echo "... fft.s"
@@ -653,6 +750,9 @@ help:
 	@echo "... wav_main.o"
 	@echo "... wav_main.i"
 	@echo "... wav_main.s"
+	@echo "... write_wav_main.o"
+	@echo "... write_wav_main.i"
+	@echo "... write_wav_main.s"
 .PHONY : help
 
 

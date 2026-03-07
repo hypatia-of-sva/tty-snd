@@ -53,6 +53,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/tty-snd-wav.dir/DependInfo.cmake"
+  "CMakeFiles/tty-snd-write_wav.dir/DependInfo.cmake"
   "CMakeFiles/tty-snd-complexify.dir/DependInfo.cmake"
   "CMakeFiles/tty-snd-reduce_real.dir/DependInfo.cmake"
   "CMakeFiles/tty-snd-reduce_imag.dir/DependInfo.cmake"
@@ -60,4 +61,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/tty-snd-fft.dir/DependInfo.cmake"
   "CMakeFiles/tty-snd-ifft.dir/DependInfo.cmake"
   "CMakeFiles/tty-snd-formant.dir/DependInfo.cmake"
+  "CMakeFiles/tty-snd-deriv.dir/DependInfo.cmake"
   )

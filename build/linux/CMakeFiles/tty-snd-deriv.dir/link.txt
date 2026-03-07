@@ -1,0 +1,1 @@
+/usr/bin/cc -Wl,--dependency-file=CMakeFiles/tty-snd-deriv.dir/link.d "CMakeFiles/tty-snd-deriv.dir/deriv_main.c.o" "CMakeFiles/tty-snd-deriv.dir/util.c.o" "CMakeFiles/tty-snd-deriv.dir/alad.c.o" "CMakeFiles/tty-snd-deriv.dir/wav.c.o" -o tty-snd-deriv  -lm /usr/lib/x86_64-linux-gnu/libgsl.so /usr/lib/x86_64-linux-gnu/libgslcblas.so

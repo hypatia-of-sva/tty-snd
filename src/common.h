@@ -123,6 +123,18 @@ double VECburg(double* out_coeffs, size_t nr_coeffs, const double  * samples, si
 
 
 
+/* cutoff_intervals.c */
+
+typedef struct interval_t {
+    size_t lower_index;
+    size_t upper_index;
+} interval_t;
+void find_intervals_above_cutoff(float* data, size_t len, float cutoff, interval_t** intervals_out, size_t* nr_intervals_out);
+void print_intervals(interval_t* intervals, size_t nr_intervals);
+void merge_interval_lists(interval_t* old_intervals, size_t nr_old_intervals, interval_t* new_intervals, size_t nr_new_intervals, interval_t** intervals_out, size_t* nr_intervals_out);
+void sort_interval_lists(interval_t* intervals, size_t nr_intervals);
+void get_sorted_iteratively_merged_interval_list_by_cutoff_step(float* data, size_t len, float cutoff_step, interval_t** intervals_out, size_t* nr_intervals_out);
+
 
 
 
@@ -189,25 +201,6 @@ float* ifft_power_of_two(float* data, size_t len);
 
 
 
-
- cutoff_intervals.c 
-
-typedef struct interval_t {
-    size_t lower_index;
-    size_t upper_index;
-} interval_t;
-
-
-void find_intervals_above_cutoff(float* data, size_t len, float cutoff, interval_t** intervals_out, size_t* nr_intervals_out);
-
-void print_intervals(interval_t* intervals, size_t nr_intervals);
-
-void merge_interval_lists(interval_t* old_intervals, size_t nr_old_intervals, interval_t* new_intervals, size_t nr_new_intervals, interval_t** intervals_out, size_t* nr_intervals_out);
-
-void sort_interval_lists(interval_t* intervals, size_t nr_intervals);
-
-
-void get_sorted_iteratively_merged_interval_list_by_cutoff_step(float* data, size_t len, float cutoff_step, interval_t** intervals_out, size_t* nr_intervals_out);
 
 
 

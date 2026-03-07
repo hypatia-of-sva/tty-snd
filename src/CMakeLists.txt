@@ -45,6 +45,7 @@ find_package(GSL REQUIRED)
 
 # tty-snd-wav
 add_executable(tty-snd-wav wav_main.c ${COMMON_SOURCES})
+add_executable(tty-snd-write_wav write_wav_main.c ${COMMON_SOURCES})
 add_executable(tty-snd-complexify complexify_main.c ${COMMON_SOURCES})
 add_executable(tty-snd-reduce_real reduce_real_main.c ${COMMON_SOURCES})
 add_executable(tty-snd-reduce_imag reduce_imag_main.c ${COMMON_SOURCES})
@@ -53,6 +54,8 @@ add_executable(tty-snd-fft fft.c fft_main.c ${COMMON_SOURCES})
 add_executable(tty-snd-ifft fft.c ifft_main.c ${COMMON_SOURCES})
 add_executable(tty-snd-formant praat_burg_lpc.c formant_main.c ${COMMON_SOURCES})
 target_link_libraries(tty-snd-formant GSL::gsl GSL::gslcblas)
+add_executable(tty-snd-deriv deriv_main.c ${COMMON_SOURCES})
+target_link_libraries(tty-snd-deriv GSL::gsl GSL::gslcblas)
 
 
 

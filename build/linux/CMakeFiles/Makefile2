@@ -64,6 +64,7 @@ CMAKE_BINARY_DIR = /home/sva/projects/tty-snd-new/tty-snd/build/linux
 
 # The main recursive "all" target.
 all: CMakeFiles/tty-snd-wav.dir/all
+all: CMakeFiles/tty-snd-write_wav.dir/all
 all: CMakeFiles/tty-snd-complexify.dir/all
 all: CMakeFiles/tty-snd-reduce_real.dir/all
 all: CMakeFiles/tty-snd-reduce_imag.dir/all
@@ -71,10 +72,12 @@ all: CMakeFiles/tty-snd-reduce_cabs.dir/all
 all: CMakeFiles/tty-snd-fft.dir/all
 all: CMakeFiles/tty-snd-ifft.dir/all
 all: CMakeFiles/tty-snd-formant.dir/all
+all: CMakeFiles/tty-snd-deriv.dir/all
 .PHONY : all
 
 # The main recursive "codegen" target.
 codegen: CMakeFiles/tty-snd-wav.dir/codegen
+codegen: CMakeFiles/tty-snd-write_wav.dir/codegen
 codegen: CMakeFiles/tty-snd-complexify.dir/codegen
 codegen: CMakeFiles/tty-snd-reduce_real.dir/codegen
 codegen: CMakeFiles/tty-snd-reduce_imag.dir/codegen
@@ -82,6 +85,7 @@ codegen: CMakeFiles/tty-snd-reduce_cabs.dir/codegen
 codegen: CMakeFiles/tty-snd-fft.dir/codegen
 codegen: CMakeFiles/tty-snd-ifft.dir/codegen
 codegen: CMakeFiles/tty-snd-formant.dir/codegen
+codegen: CMakeFiles/tty-snd-deriv.dir/codegen
 .PHONY : codegen
 
 # The main recursive "preinstall" target.
@@ -90,6 +94,7 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/tty-snd-wav.dir/clean
+clean: CMakeFiles/tty-snd-write_wav.dir/clean
 clean: CMakeFiles/tty-snd-complexify.dir/clean
 clean: CMakeFiles/tty-snd-reduce_real.dir/clean
 clean: CMakeFiles/tty-snd-reduce_imag.dir/clean
@@ -97,6 +102,7 @@ clean: CMakeFiles/tty-snd-reduce_cabs.dir/clean
 clean: CMakeFiles/tty-snd-fft.dir/clean
 clean: CMakeFiles/tty-snd-ifft.dir/clean
 clean: CMakeFiles/tty-snd-formant.dir/clean
+clean: CMakeFiles/tty-snd-deriv.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -106,7 +112,7 @@ clean: CMakeFiles/tty-snd-formant.dir/clean
 CMakeFiles/tty-snd-wav.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=39,40,41,42,43 "Built target tty-snd-wav"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=44,45,46,47,48 "Built target tty-snd-wav"
 .PHONY : CMakeFiles/tty-snd-wav.dir/all
 
 # Build rule for subdir invocation for target.
@@ -123,13 +129,45 @@ tty-snd-wav: CMakeFiles/tty-snd-wav.dir/rule
 # codegen rule for target.
 CMakeFiles/tty-snd-wav.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=39,40,41,42,43 "Finished codegen for target tty-snd-wav"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=44,45,46,47,48 "Finished codegen for target tty-snd-wav"
 .PHONY : CMakeFiles/tty-snd-wav.dir/codegen
 
 # clean rule for target.
 CMakeFiles/tty-snd-wav.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-wav.dir/build.make CMakeFiles/tty-snd-wav.dir/clean
 .PHONY : CMakeFiles/tty-snd-wav.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/tty-snd-write_wav.dir
+
+# All Build rule for target.
+CMakeFiles/tty-snd-write_wav.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=49,50,51,52,53 "Built target tty-snd-write_wav"
+.PHONY : CMakeFiles/tty-snd-write_wav.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/tty-snd-write_wav.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles 5
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/tty-snd-write_wav.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles 0
+.PHONY : CMakeFiles/tty-snd-write_wav.dir/rule
+
+# Convenience name for target.
+tty-snd-write_wav: CMakeFiles/tty-snd-write_wav.dir/rule
+.PHONY : tty-snd-write_wav
+
+# codegen rule for target.
+CMakeFiles/tty-snd-write_wav.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=49,50,51,52,53 "Finished codegen for target tty-snd-write_wav"
+.PHONY : CMakeFiles/tty-snd-write_wav.dir/codegen
+
+# clean rule for target.
+CMakeFiles/tty-snd-write_wav.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-write_wav.dir/build.make CMakeFiles/tty-snd-write_wav.dir/clean
+.PHONY : CMakeFiles/tty-snd-write_wav.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/tty-snd-complexify.dir
@@ -170,7 +208,7 @@ CMakeFiles/tty-snd-complexify.dir/clean:
 CMakeFiles/tty-snd-reduce_real.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_real.dir/build.make CMakeFiles/tty-snd-reduce_real.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_real.dir/build.make CMakeFiles/tty-snd-reduce_real.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=34,35,36,37,38 "Built target tty-snd-reduce_real"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=39,40,41,42,43 "Built target tty-snd-reduce_real"
 .PHONY : CMakeFiles/tty-snd-reduce_real.dir/all
 
 # Build rule for subdir invocation for target.
@@ -187,7 +225,7 @@ tty-snd-reduce_real: CMakeFiles/tty-snd-reduce_real.dir/rule
 # codegen rule for target.
 CMakeFiles/tty-snd-reduce_real.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_real.dir/build.make CMakeFiles/tty-snd-reduce_real.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=34,35,36,37,38 "Finished codegen for target tty-snd-reduce_real"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=39,40,41,42,43 "Finished codegen for target tty-snd-reduce_real"
 .PHONY : CMakeFiles/tty-snd-reduce_real.dir/codegen
 
 # clean rule for target.
@@ -202,7 +240,7 @@ CMakeFiles/tty-snd-reduce_real.dir/clean:
 CMakeFiles/tty-snd-reduce_imag.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_imag.dir/build.make CMakeFiles/tty-snd-reduce_imag.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_imag.dir/build.make CMakeFiles/tty-snd-reduce_imag.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=29,30,31,32,33 "Built target tty-snd-reduce_imag"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=34,35,36,37,38 "Built target tty-snd-reduce_imag"
 .PHONY : CMakeFiles/tty-snd-reduce_imag.dir/all
 
 # Build rule for subdir invocation for target.
@@ -219,7 +257,7 @@ tty-snd-reduce_imag: CMakeFiles/tty-snd-reduce_imag.dir/rule
 # codegen rule for target.
 CMakeFiles/tty-snd-reduce_imag.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_imag.dir/build.make CMakeFiles/tty-snd-reduce_imag.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=29,30,31,32,33 "Finished codegen for target tty-snd-reduce_imag"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=34,35,36,37,38 "Finished codegen for target tty-snd-reduce_imag"
 .PHONY : CMakeFiles/tty-snd-reduce_imag.dir/codegen
 
 # clean rule for target.
@@ -234,7 +272,7 @@ CMakeFiles/tty-snd-reduce_imag.dir/clean:
 CMakeFiles/tty-snd-reduce_cabs.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_cabs.dir/build.make CMakeFiles/tty-snd-reduce_cabs.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_cabs.dir/build.make CMakeFiles/tty-snd-reduce_cabs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=24,25,26,27,28 "Built target tty-snd-reduce_cabs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=29,30,31,32,33 "Built target tty-snd-reduce_cabs"
 .PHONY : CMakeFiles/tty-snd-reduce_cabs.dir/all
 
 # Build rule for subdir invocation for target.
@@ -251,7 +289,7 @@ tty-snd-reduce_cabs: CMakeFiles/tty-snd-reduce_cabs.dir/rule
 # codegen rule for target.
 CMakeFiles/tty-snd-reduce_cabs.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-reduce_cabs.dir/build.make CMakeFiles/tty-snd-reduce_cabs.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=24,25,26,27,28 "Finished codegen for target tty-snd-reduce_cabs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=29,30,31,32,33 "Finished codegen for target tty-snd-reduce_cabs"
 .PHONY : CMakeFiles/tty-snd-reduce_cabs.dir/codegen
 
 # clean rule for target.
@@ -266,7 +304,7 @@ CMakeFiles/tty-snd-reduce_cabs.dir/clean:
 CMakeFiles/tty-snd-fft.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-fft.dir/build.make CMakeFiles/tty-snd-fft.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-fft.dir/build.make CMakeFiles/tty-snd-fft.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=6,7,8,9,10,11 "Built target tty-snd-fft"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=11,12,13,14,15,16 "Built target tty-snd-fft"
 .PHONY : CMakeFiles/tty-snd-fft.dir/all
 
 # Build rule for subdir invocation for target.
@@ -283,7 +321,7 @@ tty-snd-fft: CMakeFiles/tty-snd-fft.dir/rule
 # codegen rule for target.
 CMakeFiles/tty-snd-fft.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-fft.dir/build.make CMakeFiles/tty-snd-fft.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=6,7,8,9,10,11 "Finished codegen for target tty-snd-fft"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=11,12,13,14,15,16 "Finished codegen for target tty-snd-fft"
 .PHONY : CMakeFiles/tty-snd-fft.dir/codegen
 
 # clean rule for target.
@@ -298,7 +336,7 @@ CMakeFiles/tty-snd-fft.dir/clean:
 CMakeFiles/tty-snd-ifft.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-ifft.dir/build.make CMakeFiles/tty-snd-ifft.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-ifft.dir/build.make CMakeFiles/tty-snd-ifft.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=18,19,20,21,22,23 "Built target tty-snd-ifft"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=23,24,25,26,27,28 "Built target tty-snd-ifft"
 .PHONY : CMakeFiles/tty-snd-ifft.dir/all
 
 # Build rule for subdir invocation for target.
@@ -315,7 +353,7 @@ tty-snd-ifft: CMakeFiles/tty-snd-ifft.dir/rule
 # codegen rule for target.
 CMakeFiles/tty-snd-ifft.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-ifft.dir/build.make CMakeFiles/tty-snd-ifft.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=18,19,20,21,22,23 "Finished codegen for target tty-snd-ifft"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=23,24,25,26,27,28 "Finished codegen for target tty-snd-ifft"
 .PHONY : CMakeFiles/tty-snd-ifft.dir/codegen
 
 # clean rule for target.
@@ -330,7 +368,7 @@ CMakeFiles/tty-snd-ifft.dir/clean:
 CMakeFiles/tty-snd-formant.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=12,13,14,15,16,17 "Built target tty-snd-formant"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=17,18,19,20,21,22 "Built target tty-snd-formant"
 .PHONY : CMakeFiles/tty-snd-formant.dir/all
 
 # Build rule for subdir invocation for target.
@@ -347,13 +385,45 @@ tty-snd-formant: CMakeFiles/tty-snd-formant.dir/rule
 # codegen rule for target.
 CMakeFiles/tty-snd-formant.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=12,13,14,15,16,17 "Finished codegen for target tty-snd-formant"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=17,18,19,20,21,22 "Finished codegen for target tty-snd-formant"
 .PHONY : CMakeFiles/tty-snd-formant.dir/codegen
 
 # clean rule for target.
 CMakeFiles/tty-snd-formant.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-formant.dir/build.make CMakeFiles/tty-snd-formant.dir/clean
 .PHONY : CMakeFiles/tty-snd-formant.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/tty-snd-deriv.dir
+
+# All Build rule for target.
+CMakeFiles/tty-snd-deriv.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=6,7,8,9,10 "Built target tty-snd-deriv"
+.PHONY : CMakeFiles/tty-snd-deriv.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/tty-snd-deriv.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles 5
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/tty-snd-deriv.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles 0
+.PHONY : CMakeFiles/tty-snd-deriv.dir/rule
+
+# Convenience name for target.
+tty-snd-deriv: CMakeFiles/tty-snd-deriv.dir/rule
+.PHONY : tty-snd-deriv
+
+# codegen rule for target.
+CMakeFiles/tty-snd-deriv.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sva/projects/tty-snd-new/tty-snd/build/linux/CMakeFiles --progress-num=6,7,8,9,10 "Finished codegen for target tty-snd-deriv"
+.PHONY : CMakeFiles/tty-snd-deriv.dir/codegen
+
+# clean rule for target.
+CMakeFiles/tty-snd-deriv.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tty-snd-deriv.dir/build.make CMakeFiles/tty-snd-deriv.dir/clean
+.PHONY : CMakeFiles/tty-snd-deriv.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
