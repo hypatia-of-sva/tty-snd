@@ -177,7 +177,7 @@ int main(int argc, char** argv) {
 						const double bw = -log (abs_squared) * nyquist / M_PI;
 						iformant++;
 						
-						printf("F%i: %f Hz +- %f\n", iformant, f, bw);
+						printf("%f Hz +- %f\n", iformant, f, bw);
 					}
 				}
 			}
